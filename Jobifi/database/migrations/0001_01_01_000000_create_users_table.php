@@ -22,6 +22,7 @@ return new class extends Migration
                 'recruiter',
                 'seeker'
             ])->default('seeker');
+            $table->string('profile_photo')->nullable();
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();

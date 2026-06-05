@@ -1,0 +1,1 @@
+<img src="{{ asset('images/logow.png') }}" {{ $attributes->merge(['class' => ' w-auto']) }} alt="Jobifi Logo">

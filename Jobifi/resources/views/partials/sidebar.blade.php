@@ -3,18 +3,13 @@
     {{-- Logo --}}
     <div>
         <div class="flex items-center gap-3 px-6 mb-8">
-            <div class="w-9 h-9 bg-slate-950 rounded-lg flex items-center justify-center shrink-0">
-                <span class="text-white text-xs font-bold tracking-wider">JP</span>
-            </div>
-            <span class="text-sm font-extrabold tracking-widest text-slate-950 uppercase">
-                JOBIFI
-            </span>
+        <x-application-logo class="block h-16 w-auto fill-current text-gray-800 dark:text-gray-200" />
         </div>
 
         {{-- Navigation --}}
         <nav class="px-3 space-y-0.5">
-
-            <a href="{{ route('seeker.dashboard') }}"
+        @if (Auth::user()->role == 'admin')
+            <a href="{{ route('admin.dashboard') }}"
                class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all duration-150
                {{ request()->routeIs('seeker.dashboard')
                    ? 'bg-slate-100 text-slate-900 font-semibold'
@@ -84,7 +79,95 @@
                 </svg>
                 <span>Reports</span>
             </a>
+        
+        @elseif(Auth::user()->role == 'seeker')
+           
+            <a href="{{ route('seeker.dashboard') }}"
+               class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all duration-150
+               {{ request()->routeIs('admin.dashboard')
+                   ? 'bg-slate-100 text-slate-900 font-semibold'
+                   : 'text-slate-500 font-medium hover:bg-slate-50 hover:text-slate-800' }}">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                     class="w-[18px] h-[18px] shrink-0 {{ request()->routeIs('seeker.dashboard') ? 'text-slate-800' : 'text-slate-400' }}">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 0 1 6 3.75h2.25A2.25 2.25 0 0 1 10.5 6v2.25a2.25 2.25 0 0 1-2.25 2.25H6a2.25 2.25 0 0 1-2.25-2.25V6ZM3.75 15.75A2.25 2.25 0 0 1 6 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25H6A2.25 2.25 0 0 1 3.75 18v-2.25ZM13.5 6a2.25 2.25 0 0 1 2.25-2.25H18A2.25 2.25 0 0 1 20.25 6v2.25A2.25 2.25 0 0 1 18 10.5h-2.25a2.25 2.25 0 0 1-2.25-2.25V6ZM13.5 15.75a2.25 2.25 0 0 1 2.25-2.25H18a2.25 2.25 0 0 1 2.25 2.25V18A2.25 2.25 0 0 1 18 20.25h-2.25A2.25 2.25 0 0 1 13.5 18v-2.25Z" />
+                </svg>
+                <span>Dashboard</span>
+            </a>
 
+            <a href="{{ route('seeker.dashboard') }}"
+   class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all duration-150
+   {{ request()->routeIs('profile.edit') 
+       ? 'bg-slate-100 text-slate-900 font-semibold' 
+       : 'text-slate-500 font-medium hover:bg-slate-50 hover:text-slate-800' }}">
+
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+         class="w-[18px] h-[18px] shrink-0 {{ request()->routeIs('profile.edit') ? 'text-slate-800' : 'text-slate-400' }}">
+        <path stroke-linecap="round" stroke-linejoin="round"
+              d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"/>
+    </svg>
+
+    <span>Profile</span>
+</a>
+
+<a href="{{ route('seeker.dashboard') }}"
+   class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all duration-150
+   {{ request()->routeIs('jobs.*') 
+       ? 'bg-slate-100 text-slate-900 font-semibold' 
+       : 'text-slate-500 font-medium hover:bg-slate-50 hover:text-slate-800' }}">
+
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+         class="w-[18px] h-[18px] shrink-0 {{ request()->routeIs('jobs.*') ? 'text-slate-800' : 'text-slate-400' }}">
+        <path stroke-linecap="round" stroke-linejoin="round"
+              d="M10.5 6a7.5 7.5 0 1 0 0 15 7.5 7.5 0 0 0 0-15Zm0 0 7.5-1.5M21 3l-4.5 4.5"/>
+    </svg>
+
+    <span>Job Listings</span>
+</a>
+
+<a href="{{ route('seeker.dashboard') }}"
+   class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all duration-150
+   {{ request()->routeIs('saved.jobs') 
+       ? 'bg-slate-100 text-slate-900 font-semibold' 
+       : 'text-slate-500 font-medium hover:bg-slate-50 hover:text-slate-800' }}">
+
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+         class="w-[18px] h-[18px] shrink-0 {{ request()->routeIs('saved.jobs') ? 'text-slate-800' : 'text-slate-400' }}">
+        <path stroke-linecap="round" stroke-linejoin="round"
+              d="M17.25 3.75H6.75A2.25 2.25 0 0 0 4.5 6v14.25l7.5-4.5 7.5 4.5V6a2.25 2.25 0 0 0-2.25-2.25Z"/>
+    </svg>
+
+    <span>Saved Jobs</span>
+</a>
+
+<a href="{{ route('seeker.dashboard') }}"
+   class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all duration-150
+   {{ request()->routeIs('applications.*') 
+       ? 'bg-slate-100 text-slate-900 font-semibold' 
+       : 'text-slate-500 font-medium hover:bg-slate-50 hover:text-slate-800' }}">
+
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+         class="w-[18px] h-[18px] shrink-0 {{ request()->routeIs('applications.*') ? 'text-slate-800' : 'text-slate-400' }}">
+        <path stroke-linecap="round" stroke-linejoin="round"
+              d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L6 12Zm0 0h7.5"/>
+    </svg>
+
+    <span>My Applications</span>
+</a>
+
+        @elseif(Auth::user()->role == 'recruiter')
+          <a href="{{ route('recruiter.dashboard') }}"
+               class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all duration-150
+               {{ request()->routeIs('recruiter.dashboard')
+                   ? 'bg-slate-100 text-slate-900 font-semibold'
+                   : 'text-slate-500 font-medium hover:bg-slate-50 hover:text-slate-800' }}">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                     class="w-[18px] h-[18px] shrink-0 {{ request()->routeIs('recruiter.dashboard') ? 'text-slate-800' : 'text-slate-400' }}">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 0 1 6 3.75h2.25A2.25 2.25 0 0 1 10.5 6v2.25a2.25 2.25 0 0 1-2.25 2.25H6a2.25 2.25 0 0 1-2.25-2.25V6ZM3.75 15.75A2.25 2.25 0 0 1 6 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25H6A2.25 2.25 0 0 1 3.75 18v-2.25ZM13.5 6a2.25 2.25 0 0 1 2.25-2.25H18A2.25 2.25 0 0 1 20.25 6v2.25A2.25 2.25 0 0 1 18 10.5h-2.25a2.25 2.25 0 0 1-2.25-2.25V6ZM13.5 15.75a2.25 2.25 0 0 1 2.25-2.25H18a2.25 2.25 0 0 1 2.25 2.25V18A2.25 2.25 0 0 1 18 20.25h-2.25A2.25 2.25 0 0 1 13.5 18v-2.25Z" />
+                </svg>
+                <span>Dashboard</span>
+            </a>
+        
+        @endif
         </nav>
     </div>
 

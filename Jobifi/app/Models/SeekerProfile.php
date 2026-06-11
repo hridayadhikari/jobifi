@@ -18,8 +18,17 @@ class SeekerProfile extends Model
         'profile_picture'
     ];
 
+    
+
     public function user()
     {
         return $this->belongsTo(User::class);
     }
+    public function skills()
+{
+    return $this->belongsToMany(
+        Skill::class,
+        'seeker_skill'
+    );
+}
 }

@@ -23,4 +23,12 @@ class Skill extends Model
             'job_skill'
         );
     }
+
+    public function seekerProfiles()
+{
+    return $this->belongsToMany(
+        SeekerProfile::class,
+        'seeker_skill'
+    );
+}
 }

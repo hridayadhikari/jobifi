@@ -5,17 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class SeekerEducation extends Model
+class SeekerLanguage extends Model
 {
-    protected $table = 'seeker_educations';
+    protected $table = 'seeker_languages';
 
     protected $fillable = [
         'seeker_profile_id',
-        'degree',
-        'institution',
-        'description',
-        'start_year',
-        'end_year',
+        'language',
+        'proficiency',
     ];
 
     public function seekerProfile(): BelongsTo

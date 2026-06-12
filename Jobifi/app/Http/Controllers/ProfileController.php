@@ -12,27 +12,30 @@ use Illuminate\View\View;
 class ProfileController extends Controller
 {
     /**
-     * Display the user's profile form.
+     * Redirect to the role-specific profile page.
      */
-    public function edit(Request $request): View
+    public function edit(Request $request): mixed
     {
-        return view('profile.edit', [
-            'user' => $request->user(),
-        ]);
+        $role = $request->user()->role;
+
+        return match ($role) {
+            'seeker'    => redirect()->route('seeker.profile.show'),
+            'recruiter' => view('recruiter.profile.edit', ['user' => $request->user()]),
+            'admin'     => view('admin.profile.edit',     ['user' => $request->user()]),
+            default     => view('profile.edit',           ['user' => $request->user()]),
+        };
     }
 
     /**
-     * Update the user's profile information.
+     * Update name + email (shared — used by admin & recruiter views).
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
         $request->user()->fill($request->validated());
 
         if ($request->hasFile('profile_photo')) {
-
             $path = $request->file('profile_photo')
                 ->store('profile_photos', 'public');
-
             $request->user()->profile_photo = $path;
         }
 
@@ -55,11 +58,8 @@ class ProfileController extends Controller
         ]);
 
         $user = $request->user();
-
         Auth::logout();
-
         $user->delete();
-
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 

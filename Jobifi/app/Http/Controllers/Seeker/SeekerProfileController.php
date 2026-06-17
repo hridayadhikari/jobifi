@@ -29,10 +29,13 @@ class SeekerProfileController extends Controller
      */
     public function edit(): View
     {
+
         $user    = Auth::user();
         $profile = $user->seekerProfile()->firstOrCreate(['user_id' => $user->id]);
+
         $profile->load(['experiences', 'educations', 'skills', 'languages']);
         $allSkills = Skill::orderBy('name')->get();
+
 
         return view('seeker.profile.edit', compact('user', 'profile', 'allSkills'));
     }
@@ -62,7 +65,7 @@ class SeekerProfileController extends Controller
         ]);
 
         return redirect()->route('seeker.profile.show')
-                         ->with('success', 'Profile updated successfully.');
+            ->with('success', 'Profile updated successfully.');
     }
 
     /**
@@ -81,7 +84,7 @@ class SeekerProfileController extends Controller
         $profile->update(['cover_photo' => $path]);
 
         return redirect()->route('seeker.profile.edit')
-                         ->with('success', 'Cover photo updated.');
+            ->with('success', 'Cover photo updated.');
     }
 
     /**
@@ -105,24 +108,25 @@ class SeekerProfileController extends Controller
         ]);
 
         return redirect()->route('seeker.profile.edit')
-                         ->with('success', 'Resume uploaded successfully.');
+            ->with('success', 'Resume uploaded successfully.');
     }
 
     /**
      * Sync skills (array of skill IDs).
      */
-    public function updateSkills(Request $request): RedirectResponse
+    public function updateSkills(Request $request)
     {
-        $request->validate([
-            'skill_ids'   => ['nullable', 'array'],
-            'skill_ids.*' => ['integer', 'exists:skills,id'],
+        $validated = $request->validate([
+            'skill_ids'   => 'nullable|array',
+            'skill_ids.*' => 'exists:skills,id',
         ]);
 
-        $user    = Auth::user();
-        $profile = $user->seekerProfile()->firstOrCreate(['user_id' => $user->id]);
-        $profile->skills()->sync($request->skill_ids ?? []);
+        $profile = auth()->user()->seekerProfile;
 
-        return redirect()->route('seeker.profile.show')
-                         ->with('success', 'Skills updated.');
+        $profile->skills()->sync(
+            $validated['skill_ids'] ?? []
+        );
+
+        return back()->with('success', 'Skills updated.');
     }
 }

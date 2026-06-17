@@ -16,7 +16,15 @@ class Company extends Model
         'description',
         'website',
         'logo_path',
-        'headquarters_location'
+        'cover_photo',
+        'headquarters_location',
+        'industry',
+        'founded_year',
+        'employee_count',
+    ];
+
+    protected $casts = [
+        'founded_year' => 'integer',
     ];
 
     public function user()

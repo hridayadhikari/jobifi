@@ -1,4 +1,4 @@
-<aside class="w-64 bg-white border-r border-slate-100/80 flex flex-col h-screen justify-between py-6 shrink-0">
+<aside class="w-64 bg-white border-r border-slate-100/80 flex flex-col overflow-y-auto justify-between py-6 shrink-0">
 
     {{-- Logo --}}
     <div>
@@ -51,7 +51,7 @@
                     <span>Recruiter Management</span>
                 </a>
 
-                <a href="#"
+                <a href="{{ route('categories.index') }}"
                     class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all duration-150
                {{ request()->routeIs('seeker.applications')
                    ? 'bg-slate-100 text-slate-900 font-semibold'
@@ -66,7 +66,7 @@
                     <span>Category Management</span>
                 </a>
 
-                <a href="{{ route('profile.edit') }}"
+                <a href="{{ route('skills.index') }}"
                     class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all duration-150
                {{ request()->routeIs('profile.edit')
                    ? 'bg-slate-100 text-slate-900 font-semibold'
@@ -79,7 +79,23 @@
                     </svg>
                     <span>Skills Management</span>
                 </a>
+                <a href="{{ route('admin.logs.index') }}"
+                    class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all duration-150
+    {{ request()->routeIs('admin.logs.*')
+        ? 'bg-slate-100 text-slate-900 font-semibold'
+        : 'text-slate-500 font-medium hover:bg-slate-50 hover:text-slate-800' }}">
 
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor"
+                        class="w-[18px] h-[18px] shrink-0
+        {{ request()->routeIs('admin.logs.*') ? 'text-slate-700' : 'text-slate-400' }}">
+
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M12 6v6l4 2m5-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+
+                    <span>Activity Logs</span>
+                </a>
                 <a href="#"
                     class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all duration-150
                text-slate-500 font-medium hover:bg-slate-50 hover:text-slate-800">
@@ -182,22 +198,22 @@
                     </svg>
                     <span>Dashboard</span>
                 </a>
-                <a href="{{ route('seeker.dashboard') }}"
+                <a href="{{ route('recruiter.profile.show') }}"
                     class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all duration-150
-   {{ request()->routeIs('saved.jobs')
+   {{ request()->routeIs('recruiter.profile.*')
        ? 'bg-slate-100 text-slate-900 font-semibold'
        : 'text-slate-500 font-medium hover:bg-slate-50 hover:text-slate-800' }}">
 
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                         stroke="currentColor"
-                        class="w-[18px] h-[18px] shrink-0 {{ request()->routeIs('company.profile*') ? 'text-slate-800' : 'text-slate-400' }}">
+                        class="w-[18px] h-[18px] shrink-0 {{ request()->routeIs('recruiter.profile.*') ? 'text-slate-800' : 'text-slate-400' }}">
                         <path stroke-linecap="round" stroke-linejoin="round"
                             d="M3.75 21h16.5M4.5 3.75h15a.75.75 0 01.75.75V21H3.75V4.5a.75.75 0 01.75-.75ZM9 21V9h6v12" />
                     </svg>
 
-                    <span>Company Profle</span>
+                    <span>Company Profile</span>
                 </a>
-                <a href="{{ route('seeker.dashboard') }}"
+                <a href="{{ route('recruiter.jobs.index') }}"
                     class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all duration-150
    {{ request()->routeIs('saved.jobs')
        ? 'bg-slate-100 text-slate-900 font-semibold'
@@ -212,7 +228,7 @@
 
                     <span>Manage Jobs</span>
                 </a>
-                <a href="{{ route('seeker.dashboard') }}"
+                <a href="{{ route('recruiter.jobs.create') }}"
                     class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all duration-150
    {{ request()->routeIs('saved.jobs')
        ? 'bg-slate-100 text-slate-900 font-semibold'

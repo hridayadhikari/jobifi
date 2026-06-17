@@ -6,8 +6,7 @@
 
 <div class="space-y-6">
 
-```
-<!-- Welcome Section -->
+
 <div class="bg-white rounded-xl shadow p-6">
     <h1 class="text-3xl font-bold text-gray-800">
         Welcome Back, {{ Auth::user()->name }} 👋

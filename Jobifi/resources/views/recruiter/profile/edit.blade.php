@@ -19,7 +19,7 @@
 
 <div class="max-w-2xl space-y-6">
 
-    {{-- Avatar + Name --}}
+    
     <div class="bg-white rounded-xl border border-gray-200 p-6 flex items-center gap-5">
         <form method="POST" action="{{ route('profile.update') }}" enctype="multipart/form-data" id="photo-form">
             @csrf @method('PATCH')

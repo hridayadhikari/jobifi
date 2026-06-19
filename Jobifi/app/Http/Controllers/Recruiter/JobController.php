@@ -63,7 +63,7 @@ class JobController extends Controller
 
         // Retrieve the recruiter's company
         $company = auth()->user()->company;
-u
+
         // Verify company exists before creating job
         if (!$company) {
             return back()->with(

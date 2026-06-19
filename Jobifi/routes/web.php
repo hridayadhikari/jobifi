@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Seeker\SeekerProfileController;
 use App\Http\Controllers\Seeker\SeekerExperienceController;
 use App\Http\Controllers\Seeker\SeekerEducationController;
+use App\Http\Controllers\Seeker\SeekerJobController;
 use App\Http\Controllers\Recruiter\RecruiterProfileController;
 use App\Http\Controllers\SkillController;
 use App\Http\Controllers\Admin\CategoryController;
@@ -106,6 +107,9 @@ Route::middleware(['auth'])->prefix('seeker')->name('seeker.')->group(function (
     Route::get('/dashboard', function () {
         return view('seeker.dashboard');
     })->name('dashboard');
+
+    Route::get('/jobs', [SeekerJobController::class, 'index'])
+        ->name('jobs.index');
 
     // Profile
     Route::get('/profile',          [SeekerProfileController::class, 'show'])->name('profile.show');

@@ -79,6 +79,26 @@
                     </svg>
                     <span>Skills Management</span>
                 </a>
+
+
+                <a href="{{ route('admin.jobs.index') }}"
+                    class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all duration-150
+    {{ request()->routeIs('admin.jobs.*')
+        ? 'bg-slate-100 text-slate-900 font-semibold'
+        : 'text-slate-500 font-medium hover:bg-slate-50 hover:text-slate-800' }}">
+
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor"
+                        class="w-[18px] h-[18px] shrink-0 {{ request()->routeIs('admin.jobs.*') ? 'text-slate-800' : 'text-slate-400' }}">
+
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M20.25 14.15v4.072c0 .918-.716 1.678-1.633 1.722A48.658 48.658 0 0 1 12 20.25a48.655 48.655 0 0 1-6.617-.306A1.81 1.81 0 0 1 3.75 18.222V14.15M7.5 10.5h9M9 6.75h6A2.25 2.25 0 0 1 17.25 9v1.5H6.75V9A2.25 2.25 0 0 1 9 6.75Z" />
+
+                    </svg>
+
+                    <span>Job Management</span>
+                </a>
+
                 <a href="{{ route('admin.logs.index') }}"
                     class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all duration-150
     {{ request()->routeIs('admin.logs.*')

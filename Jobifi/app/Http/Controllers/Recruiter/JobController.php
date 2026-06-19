@@ -17,7 +17,7 @@ class JobController extends Controller
      * 
      * @return \Illuminate\View\View
      */
-    public function index()
+    public function index(Request $request)
     {
         // Retrieve the company associated with the authenticated user
         $company = auth()->user()->company;
@@ -29,17 +29,20 @@ class JobController extends Controller
                 ->with('error', 'Please create a company profile first.');
         }
 
-        // Fetch jobs ordered by most recent, paginated for performance
-        $jobs = $company->jobs()->orderBy('created_at', 'desc')->paginate(5);
+        $jobs = Job::query();
+
+        if ($request->filled('status')) {
+            $jobs->where('is_active', $request->status);
+        }
+
+        $jobs = $jobs->latest()
+            ->paginate(10)
+            ->withQueryString();
 
         return view('recruiter.jobs.index', compact('jobs'));
     }
 
-    /**
-     * Show the form to create a new job posting.
-     * 
-     * @return \Illuminate\View\View
-     */
+ 
     public function create()
     {
         // Load active categories and all skills for the form
@@ -53,13 +56,6 @@ class JobController extends Controller
         ));
     }
 
-    /**
-     * Store a newly created job posting in the database.
-     * Associates the job with the recruiter's company and syncs required skills.
-     * 
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
     public function store(Request $request)
     {
         // Validate job details and required skill IDs
@@ -67,7 +63,7 @@ class JobController extends Controller
 
         // Retrieve the recruiter's company
         $company = auth()->user()->company;
-
+u
         // Verify company exists before creating job
         if (!$company) {
             return back()->with(
@@ -138,7 +134,7 @@ class JobController extends Controller
 
         // Sync skills: use submitted skills or keep existing if not provided
         $job->skills()->sync($validated['skill_ids'] ?? $job->skills->pluck('id')->toArray());
-          ActivityLog::create([
+        ActivityLog::create([
             'user_id' => auth()->id(),
             'action' => 'JOB_UPDATED',
             'description' => 'Updated job: ' . $job->title,
@@ -157,7 +153,7 @@ class JobController extends Controller
 
         // Soft delete the job (preserves associated data integrity)
         $job->delete();
-          ActivityLog::create([
+        ActivityLog::create([
             'user_id' => auth()->id(),
             'action' => 'JOB_DELETED',
             'description' => 'Deleted job: ' . $job->title,
@@ -168,16 +164,7 @@ class JobController extends Controller
             ->with('success', 'Job deleted successfully.');
     }
 
-    /**
-     * Validate job request data.
-     * 
-     * Skill IDs can be required (for store) or optional (for update).
-     * All other job fields are always required.
-     * 
-     * @param \Illuminate\Http\Request $request
-     * @param bool $requireSkills Whether skill_ids must be present
-     * @return array Validated data
-     */
+ 
     protected function validateJobRequest(Request $request, bool $requireSkills = true): array
     {
         // Base validation rules for all job fields
@@ -199,15 +186,7 @@ class JobController extends Controller
         return $request->validate($rules);
     }
 
-    /**
-     * Authorize that the job belongs to the authenticated recruiter's company.
-     * 
-     * Aborts with 403 Forbidden if unauthorized.
-     * 
-     * @param \App\Models\Job $job
-     * @return void
-     * @throws \Illuminate\Auth\Access\AuthorizationException
-     */
+
     protected function authorizeJob(Job $job): void
     {
         // Retrieve the authenticated recruiter's company

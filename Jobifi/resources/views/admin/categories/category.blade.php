@@ -18,65 +18,29 @@
                 Create and organize job categories for the platform.
             </p>
         </div>
-       
 
 
-        @if (session('error'))
-            <div class="mb-6 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
-                {{ session('error') }}
-            </div>
-        @endif
+
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
-            {{-- Add Category Card --}}
-            <div class="lg:col-span-1">
-
-                <div class="bg-white border border-gray-200">
-
-                    <div class="border-b border-gray-200 px-6 py-5">
-                        <h4 class="font-bold text-xl uppercase">
-                            Add New Category
-                        </h4>
-                    </div>
-
-                    <div class="p-6">
-
-                        <form action="{{ route('categories.store') }}" method="POST">
-                            @csrf
-
-                            <div>
-                                <label class="block text-xs font-bold tracking-wider text-gray-400 uppercase mb-2">
-                                    Category Name
-                                </label>
-
-                                <input type="text" name="name" placeholder="e.g. Engineering"
-                                    class="w-full border border-gray-300 px-4 py-3 focus:ring-0 focus:border-black"
-                                    required>
-                            </div>
-
-                            <button type="submit"
-                                class="mt-5 w-full bg-black text-white py-3 font-bold uppercase hover:bg-gray-800 transition">
-                                + Add Category
-                            </button>
-
-                        </form>
-
-                    </div>
-
-                </div>
-
-            </div>
 
             {{-- Categories Table --}}
-            <div class="lg:col-span-2">
+            <div class="lg:col-span-3">
 
                 <div class="bg-white border border-gray-200">
 
-                    <div class="border-b border-gray-200 px-6 py-5">
+                    <div class="border-b border-gray-200 px-6 py-5 flex items-center justify-between">
+
                         <h4 class="font-bold text-xl uppercase">
                             All Categories
                         </h4>
+
+                        <button type="button" onclick="openModal('categoryModal')"
+                            class="bg-black text-white px-5 py-2 font-semibold uppercase hover:bg-gray-800 transition">
+                            + Add Category
+                        </button>
+
                     </div>
 
                     <div class="p-6 overflow-x-auto">
@@ -197,6 +161,78 @@
             </div>
 
         </div>
+
+    </div>
+
+
+
+
+    {{-- Add Category Modal --}}
+    <div id="categoryModal" data-modal class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50">
+
+        <div class="bg-white w-full max-w-md mx-4 shadow-xl">
+
+            {{-- Modal Header --}}
+            <div class="flex items-center justify-between px-6 py-4 border-b">
+
+                <h3 class="font-bold text-xl uppercase">
+                    Add New Category
+                </h3>
+
+                <button type="button" onclick="closeModal('categoryModal')" class="text-gray-500 hover:text-black text-xl">
+                    ✕
+                </button>
+
+            </div>
+
+            {{-- Modal Body --}}
+            <div class="p-6">
+
+                <form action="{{ route('categories.store') }}" method="POST">
+
+                    @csrf
+
+                    <div>
+
+                        <label class="block text-xs font-bold tracking-wider text-gray-400 uppercase mb-2">
+                            Category Name
+                        </label>
+
+                        <input type="text" name="name" placeholder="e.g. Engineering" required
+                            class="w-full border border-gray-300 px-4 py-3 focus:border-black focus:ring-0">
+
+                        @error('name')
+                            <p class="mt-2 text-sm text-red-500">
+                                {{ $message }}
+                            </p>
+                        @enderror
+
+                    </div>
+
+                    <div class="flex justify-end gap-3 mt-6">
+
+                        <button type="button" onclick="closeModal('categoryModal')"
+                            class="px-4 py-2 border border-gray-300 font-medium">
+
+                            Cancel
+
+                        </button>
+
+                        <button type="submit" class="px-5 py-2 bg-black text-white font-semibold">
+
+                            Save Category
+
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
 
     </div>
 @endsection

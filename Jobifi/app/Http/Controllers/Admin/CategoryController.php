@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Models\Job;
 use App\Models\ActivityLog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -31,7 +32,7 @@ class CategoryController extends Controller
             'name' => ['required', 'string', 'max:255', 'unique:categories,name'],
         ]);
 
-          $category = Category::create([
+        $category = Category::create([
             'name' => $request->name,
             'slug' => Str::slug($request->name),
         ]);
@@ -63,7 +64,7 @@ class CategoryController extends Controller
             'slug' => Str::slug($request->name),
         ]);
 
-         ActivityLog::create([
+        ActivityLog::create([
             'user_id' => auth()->id(),
             'action' => 'CATEGORY_UPDATED',
             'description' => 'Category Updated: ' . $category->name,
@@ -84,10 +85,19 @@ class CategoryController extends Controller
                 'Cannot delete category that has jobs.'
             );
         }
+        $jobCount = Job::withTrashed()
+            ->where('category_id', $category->id)
+            ->count();
 
+        if ($jobCount > 0) {
+            return back()->with(
+                'error',
+                'Category cannot be deleted because jobs exist.'
+            );
+        }
         $category->delete();
 
-          ActivityLog::create([
+        ActivityLog::create([
             'user_id' => auth()->id(),
             'action' => 'CATEGORY_DELETED',
             'description' => 'Category Deleted: ' . $category->name,

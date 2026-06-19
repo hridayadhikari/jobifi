@@ -20,7 +20,7 @@
         {{-- Logs Table --}}
         <div class="bg-white rounded-xl border border-gray-200  overflow-hidden">
 
-            <div class="px-6 py-5 border-b border-gray-200">
+            <div class="px-6 py-6 border-b border-gray-200">
                 <h2 class="text-xl font-semibold text-gray-900 uppercase">
                     System Activity
                 </h2>

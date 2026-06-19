@@ -8,13 +8,14 @@ use App\Http\Controllers\Recruiter\RecruiterProfileController;
 use App\Http\Controllers\SkillController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ActivityLogController;
+use App\Http\Controllers\Admin\AdminJobController;
 use App\Http\Controllers\Recruiter\JobController;
 use Illuminate\Support\Facades\Route;
 
 
 
 Route::get('/', function () {
-    return view('auth.login');
+    return view('auth.register');
 });
 
 
@@ -60,6 +61,12 @@ Route::middleware(['auth', 'admin'])->group(function () {
         ->name('categories.toggle-status');
     Route::get('/admin/logs', [ActivityLogController::class, 'index'])
         ->name('admin.logs.index');
+
+    Route::get('/admin/jobs', [AdminJobController::class, 'index'])
+        ->name('admin.jobs.index');
+
+    Route::patch('/admin/jobs/{job}/toggle', [AdminJobController::class, 'toggle'])
+        ->name('admin.jobs.toggle');
 });
 
 

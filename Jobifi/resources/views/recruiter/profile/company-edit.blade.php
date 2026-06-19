@@ -6,8 +6,8 @@
 {{-- Header --}}
 <div class="mb-6 flex items-center justify-between">
     <div>
-        <h1 class="text-2xl font-bold text-gray-900">Edit Company Profile</h1>
-        <p class="text-sm text-gray-500 mt-0.5">Update your company information.</p>
+        <h1 class="page-heading">Edit Company Profile</h1>
+        <p class="page-subheading">Update your company information.</p>
     </div>
     <a href="{{ route('recruiter.profile.show') }}"
        class="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium border border-gray-300 rounded-lg text-gray-700 bg-white hover:bg-gray-50 transition">
@@ -29,7 +29,7 @@
 
             {{-- Company Logo --}}
             <div class="bg-white rounded-xl border border-gray-200 p-6">
-                <h2 class="text-xs font-bold text-gray-700 uppercase tracking-widest mb-4">Company Logo</h2>
+                <h2 class="card-heading">Company Logo</h2>
                 <div class="flex items-center gap-5">
                     <div id="logo-preview"
                          class="w-20 h-20 rounded-xl border border-gray-200 bg-gray-50 flex items-center justify-center overflow-hidden shrink-0 shadow-sm">
@@ -62,7 +62,7 @@
 
             {{-- Company Cover Photo --}}
             <div class="bg-white rounded-xl border border-gray-200 p-6">
-                <h2 class="text-xs font-bold text-gray-700 uppercase tracking-widest mb-4">Company Cover Photo</h2>
+                <h2 class="card-heading">Company Cover Photo</h2>
                 <div class="space-y-4">
                     <div id="cover-preview" class="relative overflow-hidden rounded-xl border border-gray-200 bg-gray-50 h-40 flex items-center justify-center">
                         @if($user->company->cover_photo)
@@ -91,7 +91,7 @@
 
             {{-- Company Information --}}
             <div class="bg-white rounded-xl border border-gray-200 p-6 space-y-4">
-                <h2 class="text-xs font-bold text-gray-700 uppercase tracking-widest mb-2">Company Information</h2>
+                <h2 class="card-heading">Company Information</h2>
 
                 
                 {{-- Name --}}
@@ -175,12 +175,10 @@
 
             {{-- Submit --}}
             <div class="flex items-center gap-3">
-                <button type="submit"
-                        class="px-6 py-2.5 text-sm font-semibold text-white bg-gray-900 rounded-lg hover:bg-gray-700 transition">
+                <button type="submit" class="btn-primary-lg">
                     Save Changes
                 </button>
-                <a href="{{ route('recruiter.profile.show') }}"
-                   class="px-6 py-2.5 text-sm font-medium text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50 transition">
+                <a href="{{ route('recruiter.profile.show') }}" class="btn-secondary-lg">
                     Cancel
                 </a>
             </div>
@@ -192,7 +190,7 @@
 
         {{-- Recruiter Contact (read-only) --}}
         <div class="bg-white rounded-xl border border-gray-200 p-5 mt-6">
-            <h2 class="text-xs font-bold text-gray-700 uppercase tracking-widest mb-4">Recruiter Contact</h2>
+            <h2 class="card-heading">Recruiter Contact</h2>
         
 
             <div class="flex items-center gap-3 mb-4">

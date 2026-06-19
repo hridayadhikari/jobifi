@@ -90,7 +90,7 @@
         {{-- About --}}
         @if($profile->bio)
         <div class="bg-white rounded-xl border border-gray-200 p-6">
-            <h2 class="text-base font-semibold text-gray-900 mb-4">About</h2>
+            <h2 class="card-heading">About</h2>
             <p class="text-sm text-gray-600 leading-relaxed whitespace-pre-line">{{ $profile->bio }}</p>
         </div>
         @endif
@@ -99,7 +99,7 @@
         @php $experiences = $profile->experiences; $expCount = $experiences->count(); @endphp
         @if($expCount)
         <div class="bg-white rounded-xl border border-gray-200 p-6">
-            <h2 class="text-base font-semibold text-gray-900 mb-5">Experience</h2>
+            <h2 class="card-heading">Experience</h2>
             <div class="space-y-5">
                 {{-- Show only first 2, rest hidden --}}
                 @foreach($experiences as $i => $exp)
@@ -147,7 +147,7 @@
         {{-- Education --}}
         @if($profile->educations->count())
         <div class="bg-white rounded-xl border border-gray-200 p-6">
-            <h2 class="text-base font-semibold text-gray-900 mb-5">Education</h2>
+            <h2 class="card-heading">Education</h2>
             <div class="space-y-5">
                 @foreach($profile->educations as $edu)
                 <div class="flex gap-4">
@@ -203,7 +203,7 @@
 
         {{-- Contact Info --}}
         <div class="bg-white rounded-xl border border-gray-200 p-5">
-            <h2 class="text-base font-semibold text-gray-900 mb-4">Contact Info</h2>
+            <h2 class="card-heading">Contact Info</h2>
             <ul class="space-y-3">
                 <li class="flex items-center gap-2.5 text-sm text-gray-600">
                     <svg class="w-4 h-4 text-gray-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -258,7 +258,7 @@
         {{-- Skills --}}
         @if($profile->skills->count())
         <div class="bg-white rounded-xl border border-gray-200 p-5">
-            <h2 class="text-base font-semibold text-gray-900 mb-4">Skills</h2>
+            <h2 class="card-heading">Skills</h2>
             <div class="flex flex-wrap gap-2">
                 @foreach($profile->skills as $skill)
                 <span class="px-3 py-1 bg-white border border-gray-300 text-gray-700 text-xs font-medium rounded-full">
@@ -272,7 +272,7 @@
         {{-- Languages --}}
         @if($profile->languages->count())
         <div class="bg-white rounded-xl border border-gray-200 p-5">
-            <h2 class="text-base font-semibold text-gray-900 mb-4">Languages</h2>
+            <h2 class="card-heading">Languages</h2>
             <ul class="divide-y divide-gray-100">
                 @foreach($profile->languages as $lang)
                 <li class="flex items-center justify-between py-2.5 first:pt-0 last:pb-0">
@@ -287,7 +287,7 @@
         {{-- Resume --}}
         @if($profile->resume_path)
         <div class="bg-white rounded-xl border border-gray-200 p-5">
-            <h2 class="text-base font-semibold text-gray-900 mb-3">Resume</h2>
+            <h2 class="card-heading">Resume</h2>
             <a href="{{ asset('storage/' . $profile->resume_path) }}" target="_blank"
                class="flex items-center gap-2.5 p-3 bg-gray-50 rounded-lg border border-gray-200 hover:bg-gray-100 transition group">
                 <svg class="w-5 h-5 text-red-500 shrink-0" fill="currentColor" viewBox="0 0 20 20">

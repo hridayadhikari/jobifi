@@ -122,14 +122,14 @@
         {{-- About the Company --}}
         @if($user->company && $user->company->description)
         <div class="bg-white rounded-xl border border-gray-200 p-6">
-            <h2 class="text-xs font-bold text-gray-700 uppercase tracking-widest mb-4">About the Company</h2>
+            <h2 class="card-heading">About the Company</h2>
             <p class="text-sm text-gray-600 leading-relaxed whitespace-pre-line">{{ $user->company->description }}</p>
         </div>
         @endif
 
         {{-- Current Job Openings --}}
         <div class="bg-white rounded-xl border border-gray-200 p-6">
-            <h2 class="text-xs font-bold text-gray-700 uppercase tracking-widest mb-4">Current Job Openings</h2>
+            <h2 class="card-heading">Current Job Openings</h2>
 
             @if($jobs->count())
                 <div class="space-y-1">
@@ -198,7 +198,7 @@
         {{-- Company Details --}}
         @if($user->company)
         <div class="bg-white rounded-xl border border-gray-200 p-5">
-            <h2 class="text-xs font-bold text-gray-700 uppercase tracking-widest mb-4">Company Details</h2>
+            <h2 class="card-heading">Company Details</h2>
 
             {{-- Links --}}
             <ul class="space-y-3 mb-4">
@@ -251,7 +251,7 @@
         {{-- ══════ RECRUITER CONTACT ══════ --}}
         @if($user->designation || $user->phone || $user->email)
         <div class="bg-white rounded-xl border border-gray-200 p-5">
-            <h2 class="text-xs font-bold text-gray-700 uppercase tracking-widest mb-4">Recruiter Contact</h2>
+            <h2 class="card-heading">Recruiter Contact</h2>
 
             {{-- Avatar + Name --}}
             <div class="flex items-center gap-3 mb-4">

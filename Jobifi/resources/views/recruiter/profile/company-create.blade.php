@@ -5,8 +5,8 @@
 
 {{-- Header --}}
 <div class="mb-6">
-    <h1 class="text-2xl font-bold text-gray-900">Create Company Profile</h1>
-    <p class="text-sm text-gray-500 mt-0.5">Set up your company page so job seekers can find you.</p>
+    <h1 class="page-heading">Create Company Profile</h1>
+    <p class="page-subheading">Set up your company page so job seekers can find you.</p>
 </div>
 
 <div class="grid grid-cols-3 gap-6">
@@ -19,7 +19,7 @@
 
             {{-- Company Logo --}}
             <div class="bg-white rounded-xl border border-gray-200 p-6">
-                <h2 class="text-xs font-bold text-gray-700 uppercase tracking-widest mb-4">Company Logo</h2>
+                <h2 class="card-heading">Company Logo</h2>
                 <div class="flex items-center gap-5">
                     <div id="logo-preview"
                          class="w-20 h-20 rounded-xl border-2 border-dashed border-gray-300 bg-gray-50 flex items-center justify-center overflow-hidden shrink-0">
@@ -47,7 +47,7 @@
 
             {{-- Company Cover Photo --}}
             <div class="bg-white rounded-xl border border-gray-200 p-6">
-                <h2 class="text-xs font-bold text-gray-700 uppercase tracking-widest mb-4">Company Cover Photo</h2>
+                <h2 class="card-heading">Company Cover Photo</h2>
                 <div class="space-y-4">
                     <div id="cover-preview" class="relative overflow-hidden rounded-xl border border-gray-200 bg-gray-50 h-40 flex items-center justify-center">
                         <span class="text-sm text-gray-400">No cover photo uploaded yet.</span>
@@ -71,7 +71,7 @@
 
             {{-- Company Information --}}
             <div class="bg-white rounded-xl border border-gray-200 p-6 space-y-4">
-                <h2 class="text-xs font-bold text-gray-700 uppercase tracking-widest mb-2">Company Information</h2>
+                <h2 class="card-heading">Company Information</h2>
 
                 {{-- Name --}}
                 <div>
@@ -148,12 +148,10 @@
 
             {{-- Submit --}}
             <div class="flex items-center gap-3">
-                <button type="submit"
-                        class="px-6 py-2.5 text-sm font-semibold text-white bg-gray-900 rounded-lg hover:bg-gray-700 transition">
+                <button type="submit" class="btn-primary-lg">
                     Create Company Profile
                 </button>
-                <a href="{{ route('recruiter.dashboard') }}"
-                   class="px-6 py-2.5 text-sm font-medium text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50 transition">
+                <a href="{{ route('recruiter.dashboard') }}" class="btn-secondary-lg">
                     Cancel
                 </a>
             </div>
@@ -164,7 +162,7 @@
     <div class="col-span-1 space-y-5">
 
         <div class="bg-white rounded-xl border border-gray-200 p-5 mt-6">
-            <h2 class="text-xs font-bold text-gray-700 uppercase tracking-widest mb-4">Recruiter Contact</h2>
+            <h2 class="card-heading">Recruiter Contact</h2>
 
             <div class="flex items-center gap-3 mb-4">
                 <div class="w-11 h-11 rounded-full bg-gray-100 flex items-center justify-center shrink-0 overflow-hidden ring-2 ring-gray-100">

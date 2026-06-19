@@ -30,13 +30,11 @@ class SeekerJobController extends Controller
         }
 
         if ($request->filled('category')) {
-
-            $jobs->where('category_id', $request->category);
+            $jobs->whereIn('category_id', $request->category);
         }
 
         if ($request->filled('type')) {
-
-            $jobs->where('type', $request->type);
+            $jobs->whereIn('type', $request->type);
         }
 
         // NEW: sort logic
@@ -57,5 +55,15 @@ class SeekerJobController extends Controller
             'seeker.jobs.index',
             compact('jobs', 'categories')
         );
+    }
+    public function show(Job $job)
+    {
+        $job->load([
+            'company',
+            'category',
+            'skills'
+        ]);
+
+        return view('seeker.jobs.show', compact('job'));
     }
 }

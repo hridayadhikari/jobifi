@@ -110,7 +110,8 @@ Route::middleware(['auth'])->prefix('seeker')->name('seeker.')->group(function (
 
     Route::get('/jobs', [SeekerJobController::class, 'index'])
         ->name('jobs.index');
-
+    Route::get('/jobs/{job}', [SeekerJobController::class, 'show'])
+        ->name('jobs.show');
     // Profile
     Route::get('/profile',          [SeekerProfileController::class, 'show'])->name('profile.show');
     Route::get('/profile/edit/',     [SeekerProfileController::class, 'edit'])->name('profile.edit');

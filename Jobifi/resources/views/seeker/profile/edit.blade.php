@@ -6,16 +6,14 @@
     {{-- Page Header --}}
     <div class="flex items-center justify-between mb-6">
         <div>
-            <h1 class="text-2xl font-bold text-gray-900">Edit Profile</h1>
-            <p class="text-sm text-gray-500 mt-0.5">Update your professional information and settings.</p>
+            <h1 class="page-heading">Edit Profile</h1>
+            <p class="page-subheading">Update your professional information and settings.</p>
         </div>
         <div class="flex items-center gap-3">
-            <a href="{{ route('seeker.dashboard') }}"
-                class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition">
+            <a href="{{ route('seeker.dashboard') }}" class="btn-secondary">
                 Cancel
             </a>
-            <button form="basic-info-form"
-                class="px-4 py-2 text-sm font-semibold text-white bg-gray-900 rounded-lg hover:bg-gray-700 transition">
+            <button form="basic-info-form" class="btn-primary">
                 Save Changes
             </button>
         </div>
@@ -86,7 +84,7 @@
         @csrf @method('PATCH')
 
         <div class="bg-white rounded-xl border border-gray-200 p-6">
-            <h2 class="text-base font-semibold text-gray-900 mb-5">General Information</h2>
+            <h2 class="card-heading">General Information</h2>
 
             {{-- First / Last name --}}
             <div class="grid grid-cols-2 gap-4 mb-4">
@@ -168,7 +166,7 @@
 
         {{--  PROFESSIONAL SUMMARY --}}
         <div class="bg-white rounded-xl border border-gray-200 p-6">
-            <h2 class="text-base font-semibold text-gray-900 mb-4">Professional Summary</h2>
+            <h2 class="card-heading">Professional Summary</h2>
             <textarea name="bio" id="bio" rows="6"
                 placeholder="Tell recruiters about yourself, your skills, and your career goals..."
                 class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition resize-y">{{ old('bio', $profile->bio) }}</textarea>
@@ -179,7 +177,7 @@
 
         {{-- SOCIAL PROFILES --}}
         <div class="bg-white rounded-xl border border-gray-200 p-6">
-            <h2 class="text-base font-semibold text-gray-900 mb-5">Social Profiles</h2>
+            <h2 class="card-heading">Social Profiles</h2>
             <div class="grid grid-cols-2 gap-4">
                 <div>
                     <label class="block text-[11px] font-semibold text-gray-500 uppercase tracking-wide mb-1">LinkedIn
@@ -224,7 +222,7 @@
      RESUME UPLOAD
  --}}
     <div class="bg-white rounded-xl border border-gray-200 p-6 mb-6">
-        <h2 class="text-base font-semibold text-gray-900 mb-4">Resume / CV</h2>
+        <h2 class="card-heading">Resume / CV</h2>
 
         @if ($profile->resume_path)
             <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg border border-gray-200 mb-4">
@@ -267,7 +265,7 @@
      SKILLS
  --}}
     <div class="bg-white rounded-xl border border-gray-200 p-6 mb-6">
-        <h2 class="text-base font-semibold text-gray-900 mb-4">Skills</h2>
+        <h2 class="card-heading">Skills</h2>
         <form method="POST" action="{{ route('seeker.profile.skills.update') }}" id="skillsForm">
             @csrf
             @method('PATCH')
@@ -289,8 +287,7 @@
 
             <div id="hiddenSkills"></div>
 
-            <button type="submit"
-                class="px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-gray-700 transition">
+            <button type="submit" class="btn-primary">
                 Save Skills
             </button>
         </form>
@@ -388,7 +385,7 @@
      EXPERIENCE
  --}}
     <div class="bg-white rounded-xl border border-gray-200 p-6 mb-6" x-data="{ addExp: false, editExp: null }">
-        <h2 class="text-base font-semibold text-gray-900 mb-4">Experience</h2>
+        <h2 class="card-heading">Experience</h2>
 
         {{-- Existing entries --}}
         <div class="space-y-3 mb-4">
@@ -542,7 +539,7 @@
      EDUCATION
  --}}
     <div class="bg-white rounded-xl border border-gray-200 p-6 mb-6" x-data="{ addEdu: false }">
-        <h2 class="text-base font-semibold text-gray-900 mb-4">Education</h2>
+        <h2 class="card-heading">Education</h2>
 
         <div class="space-y-3 mb-4">
             @forelse($profile->educations as $edu)

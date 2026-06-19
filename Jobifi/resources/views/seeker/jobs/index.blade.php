@@ -9,7 +9,8 @@
         {{-- Search Section --}}
         <div class="mb-8">
 
-            <form id="jobSearchForm" action="{{ route('seeker.jobs.index') }}" method="GET" class="flex flex-col lg:flex-row gap-4">
+            <form id="jobSearchForm" action="{{ route('seeker.jobs.index') }}" method="GET"
+                class="flex flex-col lg:flex-row gap-4">
 
                 <div class="relative flex-1">
 
@@ -50,31 +51,24 @@
                 <div class="bg-white border border-gray-200 rounded-lg overflow-hidden">
 
                     <div class="px-6 py-5 border-b border-gray-200">
-
-                        <h2 class="font-bold uppercase tracking-wide text-slate-900">
-                            Filters
-                        </h2>
-
+                        <h2 class="card-heading mb-0">Filters</h2>
                     </div>
 
                     <div class="p-6">
 
                         {{-- Categories --}}
                         <div class="mb-8">
-
-                            <h3 class="text-sm font-bold text-gray-500 uppercase mb-4">
-                                Category
-                            </h3>
+                            <h3 class="field-label">Category</h3>
 
                             <div class="space-y-3">
 
                                 @foreach ($categories as $category)
                                     <label class="flex items-center gap-3">
 
-                                        <input type="radio" name="category" value="{{ $category->id }}"
+                                        <input type="checkbox" name="category[]" value="{{ $category->id }}"
                                             form="jobSearchForm"
                                             onchange="document.getElementById('jobSearchForm').submit()"
-                                            {{ request('category') == $category->id ? 'checked' : '' }}>
+                                            {{ in_array($category->id, (array) request('category', [])) ? 'checked' : '' }}>
 
                                         <span>{{ $category->name }}</span>
 
@@ -87,20 +81,17 @@
 
                         {{-- Job Type --}}
                         <div class="mb-8">
-
-                            <h3 class="text-sm font-bold text-gray-500 uppercase mb-4">
-                                Job Type
-                            </h3>
+                            <h3 class="field-label">Job Type</h3>
 
                             <div class="space-y-3">
 
                                 @foreach (['full-time', 'part-time', 'contract', 'internship'] as $type)
                                     <label class="flex items-center gap-3">
 
-                                        <input type="radio" name="type" value="{{ $type }}"
+                                        <input type="checkbox" name="type[]" value="{{ $type }}"
                                             form="jobSearchForm"
                                             onchange="document.getElementById('jobSearchForm').submit()"
-                                            {{ request('type') == $type ? 'checked' : '' }}>
+                                            {{ in_array($type, (array) request('type', [])) ? 'checked' : '' }}>
 
                                         <span>{{ ucwords(str_replace('-', ' ', $type)) }}</span>
 
@@ -111,11 +102,8 @@
 
                         </div>
 
-                        <a href="{{ route('seeker.jobs.index') }}"
-                            class="w-full block text-center border-2 border-black py-3 font-medium hover:bg-black hover:text-white transition">
-
+                        <a href="{{ route('seeker.jobs.index') }}" class="btn-secondary w-full justify-center">
                             Clear Filters
-
                         </a>
 
                     </div>
@@ -144,11 +132,9 @@
                             Sort by:
                         </span>
 
-                        <select name="sort" form="jobSearchForm"
-                            onchange="document.getElementById('jobSearchForm').submit()"
-                            class="border-none bg-transparent font-semibold focus:outline-none">
-                            <option value="newest" {{ request('sort', 'newest') == 'newest' ? 'selected' : '' }}>Newest</option>
-                            <option value="oldest" {{ request('sort') == 'oldest' ? 'selected' : '' }}>Oldest</option>
+                        <select class="border-none bg-transparent font-semibold focus:outline-none">
+                            <option>Newest</option>
+                            <option>Oldest</option>
                         </select>
 
                     </div>
@@ -173,9 +159,12 @@
 
                                 <div>
 
-                                    <h2 class="text-2xl font-bold text-slate-900">
+                                    <a href="{{ route('seeker.jobs.show', $job) }}"
+                                        class="text-2xl font-bold text-slate-900 hover:text-black">
+
                                         {{ $job->title }}
-                                    </h2>
+
+                                    </a>
 
                                     <div class="flex flex-wrap gap-5 mt-2 text-gray-500">
 

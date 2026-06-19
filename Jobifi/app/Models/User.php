@@ -19,6 +19,9 @@ class User extends Authenticatable
         'password',
         'role',
         'profile_photo',
+        'designation',
+        'phone',
+        'linkedin_url',
     ];
 
     protected $hidden = [
@@ -26,10 +29,6 @@ class User extends Authenticatable
         'remember_token',
     ];
 
-    public function recruiterProfile()
-    {
-        return $this->hasOne(RecruiterProfile::class);
-    }
 
     public function seekerProfile()
     {

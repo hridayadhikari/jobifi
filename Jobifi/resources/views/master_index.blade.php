@@ -136,13 +136,112 @@
             background: #ef4444 !important;
             opacity: 1 !important;
         }
+
+        #loader {
+            position: fixed;
+            inset: 0;
+            z-index: 99999;
+            background: rgba(255, 255, 255, 0.45);
+            backdrop-filter: blur(3px);
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            transition: all .5s ease;
+        }
+
+        .loader-content {
+            text-align: center;
+        }
+
+        .loader-content img {
+            width: 90px;
+            height: 90px;
+            margin: auto;
+            animation: float 2s ease-in-out infinite;
+        }
+
+        .loader-content h2 {
+            margin-top: 15px;
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: 4px;
+            color: #111827;
+        }
+
+        .progress-container {
+            width: 220px;
+            height: 6px;
+
+            background: #e5e7eb;
+            border-radius: 999px;
+
+            overflow: hidden;
+
+            margin-top: 20px;
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+
+            background: #111827;
+
+            border-radius: 999px;
+
+            animation: loading 2s ease forwards;
+        }
+
+        @keyframes loading {
+
+            from {
+                width: 0%;
+            }
+
+            to {
+                width: 100%;
+            }
+
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-8px);
+            }
+
+        }
+
+        .loader-hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
     </style>
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 
 </head>
 
 <body class="bg-gray-100 overflow-hidden">
+    <div id="loader">
+
+        <div class="loader-content">
+
+            <img src="{{ asset('images/loolgo.png') }}" alt="Jobifi">
+            <div class="progress-container">
+                <div class="progress-bar"></div>
+            </div>
+
+        </div>
+
+    </div>
 
     <div class="flex h-screen overflow-hidden">
 
@@ -164,6 +263,21 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+    <script>
+        window.addEventListener('load', () => {
+
+            setTimeout(() => {
+
+                document
+                    .getElementById('loader')
+                    .classList
+                    .add('loader-hidden');
+
+            }, 1200);
+
+        });
+    </script>
     <script>
         toastr.options = {
             "closeButton": true,

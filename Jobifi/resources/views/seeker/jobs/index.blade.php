@@ -214,7 +214,7 @@
                                 </button>
 
                                 @if ($job->salary_range)
-                                    <div class="text-2xl font-bold text-slate-900">
+                                    <div class="text-2md font-bold text-slate-900">
                                         {{ $job->salary_range }}
                                     </div>
                                 @endif

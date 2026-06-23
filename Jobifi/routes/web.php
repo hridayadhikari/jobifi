@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::get('/', function () {
-    return view('admin.reports');
+    return view('seeker.applications.show');
 });
 
 

@@ -6,6 +6,7 @@ use App\Http\Controllers\Seeker\SeekerExperienceController;
 use App\Http\Controllers\Seeker\SeekerEducationController;
 use App\Http\Controllers\Seeker\SeekerJobController;
 use App\Http\Controllers\Seeker\SavedJobController;
+use App\Http\Controllers\Seeker\ApplicationController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -39,6 +40,11 @@ Route::middleware(['auth','userCheck'])->prefix('seeker')->name('seeker.')->grou
 
     //Saved Job
     Route::get('/savedjobs', [SavedJobController::class, 'index'])->name('saved-jobs.index');
-
     Route::post('/jobs/{job}/save', [SavedJobController::class, 'toggle'])->name('jobs.save');
+
+    //Appy Jobs
+    Route::get('/applications/{application}',[ApplicationController::class, 'show'])->name('applications.show');
+    Route::get('/applications', [ApplicationController::class, 'index'])->name('applications.index');
+    Route::get('/jobs/{job}/apply',[ApplicationController::class, 'create'])->name('jobs.apply.form');
+    Route::post('/jobs/{job}/apply',[ApplicationController::class, 'store'])->name('jobs.apply');
 });

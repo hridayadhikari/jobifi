@@ -37,7 +37,7 @@ class SeekerJobController extends Controller
             $jobs->whereIn('type', $request->type);
         }
 
-        // NEW: sort logic
+        
         if ($request->input('sort') === 'oldest') {
             $jobs->oldest();
         } else {
@@ -51,9 +51,15 @@ class SeekerJobController extends Controller
 
         $categories = Category::all();
 
+        $savedJobIds = auth()->user()
+            ->savedJobs
+            ->pluck('id')
+            ->toArray();
+
+
         return view(
             'seeker.jobs.index',
-            compact('jobs', 'categories')
+            compact('jobs', 'categories', 'savedJobIds')
         );
     }
     public function show(Job $job)
@@ -63,7 +69,11 @@ class SeekerJobController extends Controller
             'category',
             'skills'
         ]);
+        $isSaved = auth()->user()
+            ->savedJobs()
+            ->where('job_id', $job->id)
+            ->exists();
 
-        return view('seeker.jobs.show', compact('job'));
+        return view('seeker.jobs.show', compact('job', 'isSaved'));
     }
 }

@@ -22,12 +22,14 @@ class User extends Authenticatable
         'designation',
         'phone',
         'linkedin_url',
+        'is_active',
     ];
 
     protected $hidden = [
         'password',
         'remember_token',
     ];
+
 
 
     public function seekerProfile()

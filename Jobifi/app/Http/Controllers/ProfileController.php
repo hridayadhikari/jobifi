@@ -19,7 +19,7 @@ class ProfileController extends Controller
         $role = $request->user()->role;
 
         return match ($role) {
-            'seeker'    => redirect()->route('seeker.profile.show'),
+            'seeker'    => redirect()->route('seeker.profile.edit'),
             'recruiter' => view('recruiter.profile.edit', ['user' => $request->user()]),
             'admin'     => view('admin.profile.edit',     ['user' => $request->user()]),
             default     => view('profile.edit',           ['user' => $request->user()]),

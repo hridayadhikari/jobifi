@@ -20,7 +20,7 @@
 
         <!-- Notification -->
         <button class="text-xl hover:scale-110 transition">
-            🔔
+           <ion-icon name="notifications"></ion-icon>
         </button>
 
         <!-- Profile Dropdown -->

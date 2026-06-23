@@ -19,17 +19,15 @@ class JobController extends Controller
      */
     public function index(Request $request)
     {
-        // Retrieve the company associated with the authenticated user
         $company = auth()->user()->company;
 
-        // Redirect to company profile creation if no company exists
         if (!$company) {
             return redirect()
                 ->route('recruiter.profile.company.create')
                 ->with('error', 'Please create a company profile first.');
         }
 
-        $jobs = Job::query();
+        $jobs = $company->jobs();
 
         if ($request->filled('status')) {
             $jobs->where('is_active', $request->status);
@@ -38,11 +36,11 @@ class JobController extends Controller
         $jobs = $jobs->latest()
             ->paginate(10)
             ->withQueryString();
-
+       
         return view('recruiter.jobs.index', compact('jobs'));
     }
 
- 
+
     public function create()
     {
         // Load active categories and all skills for the form
@@ -64,6 +62,15 @@ class JobController extends Controller
         // Retrieve the recruiter's company
         $company = auth()->user()->company;
 
+        if (!auth()->user()->is_active) {
+
+            return redirect()
+                ->back()
+                ->with(
+                    'error',
+                    'Your account has been suspended.'
+                );
+        }
         // Verify company exists before creating job
         if (!$company) {
             return back()->with(
@@ -164,7 +171,7 @@ class JobController extends Controller
             ->with('success', 'Job deleted successfully.');
     }
 
- 
+
     protected function validateJobRequest(Request $request, bool $requireSkills = true): array
     {
         // Base validation rules for all job fields

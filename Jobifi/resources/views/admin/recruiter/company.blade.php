@@ -1,10 +1,33 @@
 @extends('master_index')
-@section('title', ($user->company->name ?? $user->name) . ' — Company Profile')
+@section('title', $user->company->name .' — Company Profile')
 
 @section('content')
 
+    {{-- Flash: company created --}}
+    @if (session('status') === 'company-created')
+        <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 4000)"
+            class="mb-4 flex items-center gap-2 bg-green-50 border border-green-200 text-green-700 text-sm px-4 py-3 rounded-lg">
+            <svg class="w-4 h-4 shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                    clip-rule="evenodd" />
+            </svg>
+            Company profile created successfully!
+        </div>
+    @endif
 
-   
+    {{-- Flash: company updated --}}
+    @if (session('status') === 'company-updated')
+        <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 4000)"
+            class="mb-4 flex items-center gap-2 bg-blue-50 border border-blue-200 text-blue-700 text-sm px-4 py-3 rounded-lg">
+            <svg class="w-4 h-4 shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                    clip-rule="evenodd" />
+            </svg>
+            Company profile updated successfully!
+        </div>
+    @endif
 
     {{-- ══════════════ COMPANY BANNER + HEADER ══════════════ --}}
     <div class="bg-white rounded-xl border border-gray-200 overflow-hidden mb-5">
@@ -40,18 +63,8 @@
 
                 {{-- Action Buttons --}}
                 <div class="flex items-center gap-2 mt-12">
-                    @if (auth()->user()->role === 'recruiter')
-                        <a href="{{ route('recruiter.profile.company.edit') }}"
-                            class="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium border border-gray-300 rounded-lg text-gray-700 bg-white hover:bg-gray-50 transition">
-                            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                            </svg>
-                            Edit Profile
-                        </a>
-                    @endif
 
-                    <a href="{{ route('recruiter.profile.show') }}"
+                    <a href="{{ $user->company->website }}"
                         class="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-semibold text-white bg-gray-900 rounded-lg hover:bg-gray-700 transition">
                         <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

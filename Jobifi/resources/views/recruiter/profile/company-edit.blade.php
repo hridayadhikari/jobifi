@@ -31,10 +31,10 @@
             <div class="bg-white rounded-xl border border-gray-200 p-6">
                 <h2 class="card-heading">Company Logo</h2>
                 <div class="flex items-center gap-5">
-                    <div id="logo-preview"
+                    <div id="recruiter-logo-container"
                          class="w-20 h-20 rounded-xl border border-gray-200 bg-gray-50 flex items-center justify-center overflow-hidden shrink-0 shadow-sm">
                         @if($user->company->logo_path)
-                            <img src="{{ asset('storage/' . $user->company->logo_path) }}"
+                            <img id="logo-preview-img" src="{{ asset('storage/' . $user->company->logo_path) }}"
                                  class="w-full h-full object-cover" alt="{{ $user->company->name }}">
                         @else
                             <svg class="w-8 h-8 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -44,16 +44,16 @@
                         @endif
                     </div>
                     <div>
-                        <label for="logo"
+                        <button type="button" onclick="openCropModal('logo', 'logo', 'recruiter-logo-container')"
                                class="cursor-pointer inline-flex items-center gap-2 px-4 py-2 text-sm font-medium border border-gray-300 rounded-lg text-gray-700 bg-white hover:bg-gray-50 transition">
                             <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                       d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
                             </svg>
                             {{ $user->company->logo_path ? 'Change Logo' : 'Upload Logo' }}
-                        </label>
+                        </button>
                         <input type="file" id="logo" name="logo" accept="image/png,image/jpg,image/jpeg,image/webp"
-                               class="hidden" onchange="previewLogo(this)">
+                               class="hidden">
                         <p class="text-xs text-gray-400 mt-1.5">PNG, JPG, WEBP · Max 2 MB</p>
                         @error('logo')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
                     </div>
@@ -64,25 +64,26 @@
             <div class="bg-white rounded-xl border border-gray-200 p-6">
                 <h2 class="card-heading">Company Cover Photo</h2>
                 <div class="space-y-4">
-                    <div id="cover-preview" class="relative overflow-hidden rounded-xl border border-gray-200 bg-gray-50 h-40 flex items-center justify-center">
+                    <div id="recruiter-cover-container" class="relative overflow-hidden rounded-xl border border-gray-200 bg-gray-50 h-40 flex items-center justify-center">
                         @if($user->company->cover_photo)
-                            <img src="{{ asset('storage/' . $user->company->cover_photo) }}"
+                            <img id="cover-preview-img" src="{{ asset('storage/' . $user->company->cover_photo) }}"
                                  class="absolute inset-0 w-full h-full object-cover" alt="Company Cover">
                         @else
-                            <span class="text-sm text-gray-400">No cover photo uploaded yet.</span>
+                            <img id="cover-preview-img" src="" class="absolute inset-0 w-full h-full object-cover hidden" alt="Company Cover">
+                            <span id="cover-placeholder" class="text-sm text-gray-400">No cover photo uploaded yet.</span>
                         @endif
                     </div>
                     <div>
-                        <label for="cover"
+                        <button type="button" onclick="openCropModal('cover', 'cover', 'recruiter-cover-container')"
                                class="cursor-pointer inline-flex items-center gap-2 px-4 py-2 text-sm font-medium border border-gray-300 rounded-lg text-gray-700 bg-white hover:bg-gray-50 transition">
                             <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                       d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
                             </svg>
                             {{ $user->company->cover_photo ? 'Change Cover Photo' : 'Upload Cover Photo' }}
-                        </label>
+                        </button>
                         <input type="file" id="cover" name="cover_photo" accept="image/png,image/jpg,image/jpeg,image/webp"
-                               class="hidden" onchange="previewCover(this)">
+                               class="hidden">
                         <p class="text-xs text-gray-400 mt-1.5">PNG, JPG, WEBP · Max 4 MB</p>
                         @error('cover_photo')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
                     </div>
@@ -263,26 +264,116 @@
 
 </div>
 
-<script>
-function previewLogo(input) {
-    if (!input.files || !input.files[0]) return;
-    const reader = new FileReader();
-    reader.onload = (e) => {
-        const preview = document.getElementById('logo-preview');
-        preview.innerHTML = `<img src="${e.target.result}" class="w-full h-full object-cover" alt="Logo preview">`;
-    };
-    reader.readAsDataURL(input.files[0]);
-}
+{{-- ══════════════ CROP MODAL ══════════════ --}}
+<div id="crop-modal"
+     class="fixed inset-0 z-50 flex items-center justify-center p-4 hidden"
+     style="background: rgba(0,0,0,0.65); backdrop-filter: blur(4px);">
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl overflow-hidden flex flex-col"
+         style="max-height: 90vh;">
+        {{-- Modal Header --}}
+        <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 bg-gray-900 rounded-lg flex items-center justify-center">
+                    <svg class="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                    </svg>
+                </div>
+                <div>
+                    <h3 id="crop-modal-title" class="text-sm font-semibold text-gray-900">Crop Image</h3>
+                    <p class="text-xs text-gray-400">Drag to reposition · Scroll to zoom</p>
+                </div>
+            </div>
+            <button id="crop-cancel-btn" type="button"
+                    class="p-1.5 rounded-lg text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition">
+                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            </button>
+        </div>
 
-function previewCover(input) {
-    if (!input.files || !input.files[0]) return;
-    const reader = new FileReader();
-    reader.onload = (e) => {
-        const preview = document.getElementById('cover-preview');
-        preview.innerHTML = `<img src="${e.target.result}" class="absolute inset-0 w-full h-full object-cover" alt="Cover preview">`;
-    };
-    reader.readAsDataURL(input.files[0]);
-}
+        {{-- Crop Area --}}
+        <div class="flex-1 overflow-hidden bg-gray-950 flex items-center justify-center"
+             style="min-height: 300px; max-height: 55vh;">
+            <img id="crop-image" src="" alt="Crop" style="max-width:100%; display:block;">
+        </div>
+
+        {{-- Controls --}}
+        <div class="px-6 py-4 bg-gray-50 border-t border-gray-100">
+            {{-- Zoom / Rotate toolbar --}}
+            <div class="flex items-center justify-center gap-2 mb-4">
+                <button type="button" onclick="cropperInstance.zoom(-0.1)"
+                        class="p-2 rounded-lg border border-gray-200 bg-white hover:bg-gray-50 transition text-gray-600" title="Zoom out">
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM13 10H7"/>
+                    </svg>
+                </button>
+                <button type="button" onclick="cropperInstance.zoom(0.1)"
+                        class="p-2 rounded-lg border border-gray-200 bg-white hover:bg-gray-50 transition text-gray-600" title="Zoom in">
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"/>
+                    </svg>
+                </button>
+                <button type="button" onclick="cropperInstance.rotate(-90)"
+                        class="p-2 rounded-lg border border-gray-200 bg-white hover:bg-gray-50 transition text-gray-600" title="Rotate left">
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                    </svg>
+                </button>
+                <button type="button" onclick="cropperInstance.rotate(90)"
+                        class="p-2 rounded-lg border border-gray-200 bg-white hover:bg-gray-50 transition text-gray-600" title="Rotate right">
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 4v5h-.582M4.644 11A8.001 8.001 0 0119.418 9M19.418 9H15m-11 11v-5h.581m0 0a8.003 8.003 0 0015.357-2M4.581 15H9"/>
+                    </svg>
+                </button>
+                <button type="button" onclick="cropperInstance.reset()"
+                        class="p-2 rounded-lg border border-gray-200 bg-white hover:bg-gray-50 transition text-gray-600" title="Reset">
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                    </svg>
+                </button>
+            </div>
+
+            {{-- Action Buttons --}}
+            <div class="flex items-center gap-3">
+                <button id="crop-confirm-btn" type="button"
+                        class="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-semibold text-white bg-gray-900 rounded-lg hover:bg-gray-700 transition">
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                    </svg>
+                    Apply Crop
+                </button>
+                <button id="crop-cancel-btn2" type="button"
+                        class="px-4 py-2.5 text-sm font-medium text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50 transition">
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{-- Page-specific crop callback (modal HTML + JS lives in partials/crop-modal) --}}
+<script>
+window.onCropConfirmed = function (target, dataUrl) {
+    if (target === 'logo') {
+        var logoContainer = document.getElementById('recruiter-logo-container');
+        var existing      = document.getElementById('logo-preview-img');
+        if (existing) {
+            existing.src = dataUrl;
+        } else {
+            logoContainer.innerHTML = '<img id="logo-preview-img" src="' + dataUrl + '" class="w-full h-full object-cover" alt="Logo preview">';
+        }
+        closeCropModal();
+    } else {
+        var coverImg    = document.getElementById('cover-preview-img');
+        var placeholder = document.getElementById('cover-placeholder');
+        coverImg.src = dataUrl;
+        coverImg.classList.remove('hidden');
+        if (placeholder) placeholder.style.display = 'none';
+        closeCropModal();
+    }
+};
 </script>
 
 @endsection
+

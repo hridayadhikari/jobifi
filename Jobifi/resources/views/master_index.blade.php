@@ -226,6 +226,7 @@
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.css">
 
 </head>
 
@@ -252,6 +253,7 @@
             @include('partials.navbar')
 
             <main class="flex-1 p-6 overflow-y-auto min-h-0">
+                {{ $slot ?? '' }}
                 @yield('content')
             </main>
 
@@ -263,6 +265,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.js"></script>
 
     <script>
         window.addEventListener('load', () => {
@@ -274,7 +277,7 @@
                     .classList
                     .add('loader-hidden');
 
-            }, 1200);
+            }, 10);
 
         });
     </script>
@@ -352,6 +355,9 @@
         });
     </script>
 
+
+    {{-- Global image crop modal (Cropper.js) --}}
+    @include('partials.crop-modal')
 
 </body>
 

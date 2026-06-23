@@ -205,17 +205,39 @@
                             </div>
 
                             <div class="text-right flex flex-col justify-between">
+                                <form action="{{ route('seeker.jobs.save', $job) }}" method="POST">
+                                    @csrf
 
-                                <button class="text-gray-400 hover:text-black transition">
+                                    @php
+                                        $isSaved = in_array($job->id, $savedJobIds ?? []);
+                                    @endphp
 
-                                    <ion-icon name="bookmark-outline" class="text-2xl">
-                                    </ion-icon>
+                                    <button type="submit"
+                                        class="px-3 py-2 rounded-md  hover:bg-gray-50 transition">
 
-                                </button>
+                                        <div class="flex items-center gap-2">
+
+                                            @php
+                                                $isSaved = in_array($job->id, $savedJobIds);
+                                            @endphp
+
+                                            <ion-icon name="{{ $isSaved ? 'bookmark' : 'bookmark-outline' }}">
+                                            </ion-icon>
+
+                                            {{ $isSaved ? 'Saved' : 'Save' }}
+
+                                        </div>
+
+                                    </button>
+                                </form>
 
                                 @if ($job->salary_range)
-                                    <div class="text-2md font-bold text-slate-900">
-                                        {{ $job->salary_range }}
+                                    <div class="mt-3 flex items-center gap-2 text-green-600 font-medium">
+
+                                        <ion-icon name="cash-outline"></ion-icon>
+
+                                        <span>{{ $job->salary_range }}</span>
+
                                     </div>
                                 @endif
 

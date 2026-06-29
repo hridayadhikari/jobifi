@@ -58,4 +58,5 @@ class Job extends Model
             'saved_jobs'
         );
     }
+  
 }

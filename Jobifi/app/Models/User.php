@@ -54,5 +54,21 @@ class User extends Authenticatable
             'saved_jobs'
         );
     }
-    
+    public function hasCompleteProfile(): bool
+    {
+        $profile = $this->seekerProfile;
+
+        if (!$profile) {
+            return false;
+        }
+
+        return filled($profile->phone)
+            && filled($profile->resume_path)
+            && filled($profile->address)
+            && $profile->educations()->exists();
+    }
+    public function profileViews()
+    {
+        return $this->hasMany(ProfileView::class, 'seeker_id');
+    }
 }

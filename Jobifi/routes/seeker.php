@@ -7,15 +7,14 @@ use App\Http\Controllers\Seeker\SeekerEducationController;
 use App\Http\Controllers\Seeker\SeekerJobController;
 use App\Http\Controllers\Seeker\SavedJobController;
 use App\Http\Controllers\Seeker\ApplicationController;
+use App\Http\Controllers\Seeker\DashboardController;
 use Illuminate\Support\Facades\Route;
 
 
 //  Seeker
 Route::middleware(['auth','userCheck'])->prefix('seeker')->name('seeker.')->group(function () {
 
-    Route::get('/dashboard', function () {
-        return view('seeker.dashboard');
-    })->name('dashboard');
+    Route::get('/seeker/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::get('/jobs', [SeekerJobController::class, 'index'])
         ->name('jobs.index');
@@ -47,4 +46,5 @@ Route::middleware(['auth','userCheck'])->prefix('seeker')->name('seeker.')->grou
     Route::get('/applications', [ApplicationController::class, 'index'])->name('applications.index');
     Route::get('/jobs/{job}/apply',[ApplicationController::class, 'create'])->name('jobs.apply.form');
     Route::post('/jobs/{job}/apply',[ApplicationController::class, 'store'])->name('jobs.apply');
+    Route::delete('/applications/{application}',[ApplicationController::class, 'destroy'])->name('applications.destroy');
 });

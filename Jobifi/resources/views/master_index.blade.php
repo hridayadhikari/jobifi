@@ -311,7 +311,7 @@
 
                     Swal.fire({
                         title: 'Are you sure?',
-                        text: `Are you sure you want to delete "${itemName}"`,
+                        text: `Are you sure you want to Delete "${itemName}"`,
                         icon: 'warning',
                         showCancelButton: true,
                         confirmButtonColor: '#dc2626',
@@ -354,7 +354,30 @@
             }
         });
     </script>
+    <script>
+        document.querySelectorAll('.withdraw-btn').forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
 
+                const form = this.closest('form');
+                const jobTitle = this.dataset.name || 'this position';
+                Swal.fire({
+                    title: 'Change of plans?',
+                    text: `Your application for "${jobTitle}" will be withdrawn and recruiters will no longer consider it.`,
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: '#111827',
+                    cancelButtonColor: '#9ca3af',
+                    confirmButtonText: 'Withdraw Application',
+                    cancelButtonText: 'Stay Applied'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+                });
+            });
+        });
+    </script>
 
     {{-- Global image crop modal (Cropper.js) --}}
     @include('partials.crop-modal')

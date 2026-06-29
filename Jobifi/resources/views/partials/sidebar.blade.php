@@ -23,7 +23,7 @@
                     <span>Dashboard</span>
                 </a>
 
-                <a href="{{route('users.index')}}"
+                <a href="{{ route('users.index') }}"
                     class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all duration-150
                {{ request()->routeIs('jobs.browse')
                    ? 'bg-slate-100 text-slate-900 font-semibold'
@@ -189,7 +189,7 @@
                     <span>Saved Jobs</span>
                 </a>
 
-                <a href="{{ route('seeker.dashboard') }}"
+                <a href="{{ route('seeker.applications.index') }}"
                     class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all duration-150
    {{ request()->routeIs('applications.*')
        ? 'bg-slate-100 text-slate-900 font-semibold'
@@ -248,7 +248,7 @@
 
                     <span>Manage Jobs</span>
                 </a>
-                <a href="{{ route('recruiter.jobs.create') }}"
+                <a href="{{ route('recruiter.applicants.index') }}"
                     class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all duration-150
    {{ request()->routeIs('saved.jobs')
        ? 'bg-slate-100 text-slate-900 font-semibold'

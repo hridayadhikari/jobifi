@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Seeker;
 
 use App\Models\Job;
-use App\Models\Company;
 use App\Models\Application;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -29,16 +28,23 @@ class ApplicationController extends Controller
             $application->user_id !== Auth::id(),
             403
         );
-$id= job::company();
-        $application->load('job');
-        $company = Company::with('user')->findOrFail($id);
-        dd($company);
+
+        $application->load('job', 'job.company.user');
+
+
 
         $profile = Auth::user()->seekerProfile;
         return view('seeker.applications.show', compact('application', 'profile'));
     }
     public function create(Job $job)
     {
+        $user = Auth::user();
+        if (!$user->hasCompleteProfile()) {
+
+            return redirect()
+                ->route('profile.edit')
+                ->with('error', 'Please complete your profile before applying for jobs.');
+        }
         $profile = Auth::user()->seekerProfile;
 
         return view('seeker.applications.create', compact('job', 'profile'));
@@ -89,5 +95,20 @@ $id= job::company();
         return redirect()
             ->route('seeker.applications.index')
             ->with('success', 'Application submitted successfully.');
+    }
+
+    public function destroy(Application $application)
+    {
+
+        abort_if(
+            $application->user_id !== Auth::id(),
+            403
+        );
+
+        $application->delete();
+
+        return redirect()
+            ->route('seeker.applications.index')
+            ->with('success', 'Application withdrawn successfully.');
     }
 }

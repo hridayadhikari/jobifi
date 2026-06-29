@@ -22,10 +22,11 @@
             {{-- Combined Search & Filter Form --}}
             <div class="w-full md:w-auto">
                 <form method="GET" action="{{ route('users.index') }}" class="flex flex-col gap-3">
-                    
+
                     {{-- Search Bar --}}
                     <div class="relative w-full md:w-72">
-                        <ion-icon name="search-outline" class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-lg pointer-events-none"></ion-icon>
+                        <ion-icon name="search-outline"
+                            class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-lg pointer-events-none"></ion-icon>
                         <input type="text" name="search" value="{{ request('search') }}" placeholder="Search users..."
                             class="w-full pl-10 pr-4 py-2 text-sm border border-gray-200 rounded-md focus:ring-1 focus:ring-black focus:border-black outline-none transition bg-white">
                         {{-- Hidden submit button so hitting 'Enter' submits the form --}}
@@ -34,17 +35,20 @@
 
                     {{-- Role Filter --}}
                     <div class="relative w-full md:w-72">
-                        <ion-icon name="filter-outline" class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-lg pointer-events-none"></ion-icon>
-                        
+                        <ion-icon name="filter-outline"
+                            class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-lg pointer-events-none"></ion-icon>
+
                         <select name="role" onchange="this.form.submit();"
                             class="w-full pl-10 pr-8 py-2 text-sm border border-gray-200 rounded-md focus:ring-1 focus:ring-black focus:border-black outline-none transition cursor-pointer appearance-none bg-white">
                             <option value="" {{ request('role') == '' ? 'selected' : '' }}>All Roles</option>
-                            <option value="recruiter" {{ request('role') == 'recruiter' ? 'selected' : '' }}>Recruiter</option>
+                            <option value="recruiter" {{ request('role') == 'recruiter' ? 'selected' : '' }}>Recruiter
+                            </option>
                             <option value="seeker" {{ request('role') == 'seeker' ? 'selected' : '' }}>Seeker</option>
                         </select>
-                        
+
                         {{-- Custom Dropdown Arrow --}}
-                        <ion-icon name="chevron-down-outline" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm pointer-events-none"></ion-icon>
+                        <ion-icon name="chevron-down-outline"
+                            class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm pointer-events-none"></ion-icon>
                     </div>
 
                 </form>
@@ -80,7 +84,14 @@
                                     <div class="flex items-center gap-4">
                                         <div
                                             class="w-10 h-10 rounded bg-gray-100 flex items-center justify-center border border-gray-200">
-                                            <ion-icon name="person-outline" class="text-gray-400"></ion-icon>
+                                            @if ($user->profile_photo)
+                                                <img src="{{ asset('storage/' . $user->profile_photo) }}"
+                                                    class="w-full h-full object-cover object-top" alt="{{ $user->name }}">
+                                            @else
+                                           
+                                               <ion-icon name="person-outline" class="text-gray-400"></ion-icon>
+                                            @endif
+                                            
                                         </div>
                                         <div>
                                             <p class="font-bold text-slate-900 text-sm">

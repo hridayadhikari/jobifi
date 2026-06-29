@@ -73,8 +73,16 @@
                                         {{-- Square outline avatar to match image --}}
                                         <div
                                             class="w-10 h-10 border border-gray-200 rounded flex items-center justify-center bg-gray-50/50">
-                                            <ion-icon name="person-outline" class="text-xl text-gray-400">
-                                            </ion-icon>
+                                            @if ($recruiter->profile_photo)
+                                                <img src="{{ asset('storage/' . $recruiter->profile_photo) }}"
+                                                    class="w-full h-full object-cover object-top" alt="{{ $recruiter->name }}">
+                                            @else
+                                                {{-- Placeholder icon avatar --}}
+                                                <div class="w-full h-full flex items-center justify-center bg-indigo-100">
+                                                    <span
+                                                        class="text-2xl font-bold text-indigo-500">{{ strtoupper(substr($recruiter->name, 0, 1)) }}</span>
+                                                </div>
+                                            @endif
                                         </div>
                                         <div>
                                             <p class="text-sm font-bold text-slate-900">

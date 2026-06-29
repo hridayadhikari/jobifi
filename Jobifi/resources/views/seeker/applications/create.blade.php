@@ -136,10 +136,8 @@
 
                     {{-- Action Buttons --}}
                     <div class="flex justify-end items-center gap-4 mt-8">
-                        <button type="button"
-                            class="px-8 py-3 bg-white border-2 border-black text-black text-[14px] font-bold hover:bg-gray-50 transition duration-200">
-                            Cancel
-                        </button>
+                    <a class="btn px-8 py-3 bg-white border-2 border-black text-black text-[14px] font-bold hover:bg-gray-50 transition duration-200" href="{{route('seeker.jobs.show',$job)}}"> Cancel</a>
+                        
                         <button type="submit"
                             class="px-8 py-3 bg-black border-2 border-black text-white text-[14px] font-bold hover:bg-[#1a1a1a] transition duration-200">
                             Submit Application

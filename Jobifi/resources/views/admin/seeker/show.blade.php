@@ -3,6 +3,16 @@
 
 @section('content')
 
+{{-- Back Navigation --}}
+<div class="mb-4">
+    <a href="{{ url()->previous() }}" class="inline-flex items-center gap-2 text-xs font-bold text-gray-500 hover:text-gray-900 uppercase tracking-wider transition">
+        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+        </svg>
+        Back
+    </a>
+</div>
+
 <div class="bg-white rounded-xl border border-gray-200 overflow-hidden mb-5">
 
     {{-- Cover Photo --}}
@@ -63,8 +73,6 @@
         </div>
     </div>
 </div>
-
-
 
 <div class="grid grid-cols-3 gap-5">
 

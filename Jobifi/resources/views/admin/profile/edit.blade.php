@@ -3,13 +3,7 @@
 
 @section('content')
 
-@if(session('status') === 'profile-updated')
-<div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 3000)"
-     class="mb-4 flex items-center gap-2 bg-green-50 border border-green-200 text-green-700 text-sm px-4 py-3 rounded-xl">
-    <svg class="w-4 h-4 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
-    Profile updated successfully.
-</div>
-@endif
+
 
 {{-- Header --}}
 <div class="mb-6">
@@ -38,17 +32,16 @@
                            id="photo_input"
                            name="profile_photo"
                            accept="image/jpg,image/jpeg,image/png"
-                           class="hidden"
-                           onchange="previewAndSubmit()">
+                           class="hidden">
 
-                    <div class="relative w-28 h-28 cursor-pointer group"
-                         onclick="document.getElementById('photo_input').click()">
+                    <div id="avatar-container" class="relative w-28 h-28 cursor-pointer group"
+                         onclick="openCropModal('photo_input', 'avatar', 'avatar-container')">
 
                         <img id="profile-avatar"
                              src="{{ $user->profile_photo ? asset('storage/'.$user->profile_photo) : 'https://ui-avatars.com/api/?name='.urlencode($user->name).'&size=128&background=22c55e&color=fff' }}"
                              class="w-28 h-28 rounded-full object-cover border-4 border-white shadow-lg" alt="Avatar">
 
-                        <div class="absolute bottom-0 right-0 bg-emerald-600 rounded-full p-2 shadow-lg">
+                        <div class="absolute bottom-0 right-0 bg-emerald-600 rounded-full p-2 shadow-lg group-hover:bg-emerald-700 transition-colors">
                             <svg class="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7h4l2-2h6l2 2h4v12H3V7zm9 10a4 4 0 100-8 4 4 0 000 8z"/>
                             </svg>
@@ -115,15 +108,33 @@
 </div>
 
 <script>
-function previewAndSubmit() {
-    const input  = document.getElementById('photo_input');
-    const avatar = document.getElementById('profile-avatar');
-    if (!input.files || !input.files[0]) return;
-    const reader = new FileReader();
-    reader.onload = (e) => { avatar.src = e.target.result; };
-    reader.readAsDataURL(input.files[0]);
-    document.getElementById('photo-form').submit();
-}
+    window.onCropConfirmed = function (target, dataUrl) {
+        if (target === 'avatar') {
+            // 1. Update the UI
+            document.getElementById('profile-avatar').src = dataUrl;
+            
+            // 2. Inject the Base64 data into the form
+            let form = document.getElementById('photo-form');
+            let hiddenInput = document.getElementById('cropped_avatar_data');
+            
+            if (!hiddenInput) {
+                hiddenInput = document.createElement('input');
+                hiddenInput.type = 'hidden';
+                // The distinct name for your controller to process
+                hiddenInput.name = 'cropped_profile_photo'; 
+                hiddenInput.id = 'cropped_avatar_data';
+                form.appendChild(hiddenInput);
+            }
+            
+            hiddenInput.value = dataUrl;
+
+            // 3. Close modal and submit
+            if (typeof closeCropModal === 'function') {
+                closeCropModal();
+            }
+            form.submit();
+        }
+    };
 </script>
 
 @endsection

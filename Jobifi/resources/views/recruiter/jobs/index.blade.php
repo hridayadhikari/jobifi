@@ -127,7 +127,7 @@
                                             Edit
                                         </a>
                                         
-                                        <a href="#"
+                                        <a href="{{ route('recruiter.jobs.applicants', $job->id) }}"
                                             class="text-xs font-bold text-slate-800 hover:text-black hover:underline uppercase tracking-wider transition">
                                             Applicants
                                         </a>

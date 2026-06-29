@@ -58,7 +58,7 @@
                         @csrf
 
                         <button type="submit"
-                            class="border-2 border-black px-6 py-3 font-medium rounded-lg hover:bg-gray-100 transition">
+                            class="border-2 border-black px-6 py-3 font-medium  hover:bg-gray-100 transition">
 
                             <div class="flex items-center gap-2">
 
@@ -73,12 +73,17 @@
 
                     </form>
 
-                    <button class="bg-black text-white px-8 py-3 rounded-lg font-medium hover:bg-slate-800 transition">
+                    @if (auth()->user()->hasCompleteProfile())
+                         <a href="{{ route('seeker.jobs.apply.form', $job) }}"
+                        class="bg-black text-white px-8 py-3  font-medium hover:bg-slate-800 transition">
+                        Apply Now</a>
 
-                        Apply Now
-
-                    </button>
-
+                    @else
+                        <a href="{{ route('profile.edit') }}" class="bg-black text-white px-3 py-3  font-medium hover:bg-slate-800 transition cursor-not-allowed">
+                            Complete Profile
+                        </a>
+                    @endif
+                   
                 </div>
 
             </div>
@@ -130,7 +135,7 @@
                             </span>
 
                             <span class="font-semibold text-green-600">
-                            <ion-icon name="cash-outline"></ion-icon>
+                                <ion-icon name="cash-outline"></ion-icon>
                                 {{ $job->salary_range ?? 'Not Disclosed' }}
                             </span>
 

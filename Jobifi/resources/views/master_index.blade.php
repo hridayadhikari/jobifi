@@ -190,7 +190,7 @@
 
             border-radius: 999px;
 
-            animation: loading 2s ease forwards;
+            animation: loading 3s ease forwards;
         }
 
         @keyframes loading {
@@ -226,6 +226,7 @@
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.css">
 
 </head>
 
@@ -252,6 +253,7 @@
             @include('partials.navbar')
 
             <main class="flex-1 p-6 overflow-y-auto min-h-0">
+                {{ $slot ?? '' }}
                 @yield('content')
             </main>
 
@@ -263,7 +265,8 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script>
         window.addEventListener('load', () => {
 
@@ -274,7 +277,7 @@
                     .classList
                     .add('loader-hidden');
 
-            }, 1200);
+            }, 10);
 
         });
     </script>
@@ -308,7 +311,7 @@
 
                     Swal.fire({
                         title: 'Are you sure?',
-                        text: `Are you sure you want to delete "${itemName}"`,
+                        text: `Are you sure you want to Delete "${itemName}"`,
                         icon: 'warning',
                         showCancelButton: true,
                         confirmButtonColor: '#dc2626',
@@ -351,7 +354,33 @@
             }
         });
     </script>
+    <script>
+        document.querySelectorAll('.withdraw-btn').forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
 
+                const form = this.closest('form');
+                const jobTitle = this.dataset.name || 'this position';
+                Swal.fire({
+                    title: 'Change of plans?',
+                    text: `Your application for "${jobTitle}" will be withdrawn and recruiters will no longer consider it.`,
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: '#111827',
+                    cancelButtonColor: '#9ca3af',
+                    confirmButtonText: 'Withdraw Application',
+                    cancelButtonText: 'Stay Applied'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+                });
+            });
+        });
+    </script>
+
+    {{-- Global image crop modal (Cropper.js) --}}
+    @include('partials.crop-modal')
 
 </body>
 

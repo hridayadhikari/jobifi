@@ -22,12 +22,14 @@ class User extends Authenticatable
         'designation',
         'phone',
         'linkedin_url',
+        'is_active',
     ];
 
     protected $hidden = [
         'password',
         'remember_token',
     ];
+
 
 
     public function seekerProfile()
@@ -51,5 +53,22 @@ class User extends Authenticatable
             Job::class,
             'saved_jobs'
         );
+    }
+    public function hasCompleteProfile(): bool
+    {
+        $profile = $this->seekerProfile;
+
+        if (!$profile) {
+            return false;
+        }
+
+        return filled($profile->phone)
+            && filled($profile->resume_path)
+            && filled($profile->address)
+            && $profile->educations()->exists();
+    }
+    public function profileViews()
+    {
+        return $this->hasMany(ProfileView::class, 'seeker_id');
     }
 }

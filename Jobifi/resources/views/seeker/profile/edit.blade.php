@@ -1,7 +1,7 @@
 @extends('master_index')
 @section('title', 'Edit Profile')
-@section('content')
 
+@section('content')
 
     {{-- Page Header --}}
     <div class="flex items-center justify-between mb-6">
@@ -23,25 +23,26 @@
     {{-- 
      COVER PHOTO
  --}}
-    <div class="relative mb-6 rounded-xl overflow-hidden h-40 bg-gradient-to-r from-slate-200 to-slate-300 group">
+    {{-- Cover Photo --}}
+    <div id="seeker-cover-container" class="relative mb-6 rounded-xl overflow-hidden h-40 bg-gradient-to-r from-slate-200 to-slate-300 group">
         @if ($profile->cover_photo)
-            <img src="{{ asset('storage/' . $profile->cover_photo) }}" class="w-full h-full object-cover" alt="Cover">
+            <img id="cover-bg-img" src="{{ asset('storage/' . $profile->cover_photo) }}" class="w-full h-full object-cover" alt="Cover">
+        @else
+            <img id="cover-bg-img" src="" class="w-full h-full object-cover hidden" alt="Cover">
         @endif
         <form method="POST" action="{{ route('seeker.profile.cover.update') }}" enctype="multipart/form-data"
             id="cover-form">
             @csrf
-            <input type="file" id="cover_input" name="cover_photo" accept="image/*" class="hidden"
-                onchange="document.getElementById('cover-form').submit()">
+            <input type="file" id="cover_input" name="cover_photo" accept="image/*" class="hidden">
         </form>
-        <button type="button" onclick="document.getElementById('cover_input').click()"
+        <button type="button" onclick="openCropModal('cover_input', 'cover', 'seeker-cover-container')"
             class="absolute inset-0 flex flex-col items-center justify-center gap-1 bg-black/0 group-hover:bg-black/30 transition-all duration-200 cursor-pointer">
             <svg class="w-6 h-6 text-white opacity-0 group-hover:opacity-100 transition" fill="none" viewBox="0 0 24 24"
                 stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                     d="M3 7h4l2-2h6l2 2h4v12H3V7zm9 10a4 4 0 100-8 4 4 0 000 8z" />
             </svg>
-            <span class="text-white text-xs font-medium opacity-0 group-hover:opacity-100 transition">Change Cover
-                Photo</span>
+            <span class="text-white text-xs font-medium opacity-0 group-hover:opacity-100 transition">Change Cover Photo</span>
         </button>
     </div>
 
@@ -49,15 +50,16 @@
     {{-- 
      PROFILE PHOTO  (click-to-change, overlaid on cover)
  --}}
+    {{-- Profile Photo --}}
     <div class="flex items-center gap-4 -mt-12 mb-8 px-2">
         <form method="POST" action="{{ route('profile.update') }}" enctype="multipart/form-data" id="photo-form">
             @csrf @method('PATCH')
             <input type="hidden" name="name" value="{{ $user->name }}">
             <input type="hidden" name="email" value="{{ $user->email }}">
             <input type="file" id="photo_input" name="profile_photo" accept="image/jpg,image/jpeg,image/png"
-                class="hidden" onchange="previewAndSubmitPhoto()">
-            <div class="relative w-20 h-20 rounded-full cursor-pointer ring-4 ring-white shadow-md group"
-                onclick="document.getElementById('photo_input').click()">
+                class="hidden">
+            <div id="seeker-avatar-container" class="relative w-20 h-20 rounded-full cursor-pointer ring-4 ring-white shadow-md group"
+                onclick="openCropModal('photo_input', 'avatar', 'seeker-avatar-container')">
                 <img id="profile-avatar"
                     src="{{ $user->profile_photo ? asset('storage/' . $user->profile_photo) : 'https://ui-avatars.com/api/?name=' . urlencode($user->name) . '&size=80&background=6366f1&color=fff' }}"
                     class="w-20 h-20 rounded-full object-cover" alt="Avatar">
@@ -467,7 +469,7 @@
                             @csrf @method('DELETE')
                             <button type="submit"
                                 class="delete-btn p-1.5 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 transition"
-                                data-name="this experience">
+                                data-name="this experience" >
                                 <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
@@ -678,18 +680,22 @@
     </div>
 
 
+    {{-- Page-specific crop callback (modal HTML + JS lives in partials/crop-modal) --}}
     <script>
-        function previewAndSubmitPhoto() {
-            const input = document.getElementById('photo_input');
-            const avatar = document.getElementById('profile-avatar');
-            if (!input.files || !input.files[0]) return;
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                avatar.src = e.target.result;
-            };
-            reader.readAsDataURL(input.files[0]);
-            document.getElementById('photo-form').submit();
-        }
+        window.onCropConfirmed = function (target, dataUrl) {
+            if (target === 'avatar') {
+                document.getElementById('profile-avatar').src = dataUrl;
+                closeCropModal();
+                document.getElementById('photo-form').submit();
+            } else {
+                var coverImg = document.getElementById('cover-bg-img');
+                coverImg.src = dataUrl;
+                coverImg.classList.remove('hidden');
+                closeCropModal();
+                document.getElementById('cover-form').submit();
+            }
+        };
     </script>
 
 @endsection
+

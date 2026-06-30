@@ -26,4 +26,8 @@ class Application extends Model
     {
         return $this->belongsTo(Job::class);
     }
+    public function interviewSchedule()
+{
+    return $this->hasOne(InterviewSchedule::class);
+}
 }

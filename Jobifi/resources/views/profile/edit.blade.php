@@ -14,7 +14,7 @@
             <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
                 <div class="flex items-center gap-5">
 
-                    {{-- Click-to-upload avatar --}}
+                    {{-- Form handles submission of the cropped data --}}
                     <form id="photo-upload-form"
                           method="POST"
                           action="{{ route('profile.update') }}"
@@ -25,19 +25,20 @@
                         <input type="hidden" name="name"  value="{{ auth()->user()->name }}">
                         <input type="hidden" name="email" value="{{ auth()->user()->email }}">
 
+                        {{-- Hidden file input --}}
                         <input
                             type="file"
                             id="profile_photo_input"
                             name="profile_photo"
                             accept="image/jpg,image/jpeg,image/png"
                             class="hidden"
-                            onchange="submitPhotoForm()"
                         >
 
-                        {{-- Avatar wrapper — clicking it triggers the file picker --}}
+                        {{-- Avatar wrapper — triggers the generic crop modal --}}
                         <div
+                            id="avatar-container"
                             class="relative w-16 h-16 cursor-pointer group"
-                            onclick="document.getElementById('profile_photo_input').click()"
+                            onclick="openCropModal('profile_photo_input', 'avatar', 'avatar-container')"
                             title="Click to change photo"
                         >
                             {{-- The profile image --}}
@@ -65,8 +66,6 @@
                                 </svg>
                                 <span class="text-white text-[10px] font-medium leading-none">Change</span>
                             </div>
-
-
                         </div>
                     </form>
 
@@ -107,20 +106,34 @@
         </div>
     </div>
 
+    {{-- Page-specific crop callback (modal HTML + JS lives in your crop-modal partial) --}}
     <script>
-        function submitPhotoForm() {
-            const input  = document.getElementById('profile_photo_input');
-            const avatar = document.getElementById('profile-avatar');
+        window.onCropConfirmed = function (target, dataUrl) {
+            if (target === 'avatar') {
+                // 1. Update the UI
+                document.getElementById('profile-avatar').src = dataUrl;
+                
+                // 2. Inject the Base64 data into the form
+                let form = document.getElementById('photo-upload-form');
+                let hiddenInput = document.getElementById('cropped_avatar_data');
+                
+                if (!hiddenInput) {
+                    hiddenInput = document.createElement('input');
+                    hiddenInput.type = 'hidden';
+                    // The distinct name for your controller to process
+                    hiddenInput.name = 'cropped_profile_photo'; 
+                    hiddenInput.id = 'cropped_avatar_data';
+                    form.appendChild(hiddenInput);
+                }
+                
+                hiddenInput.value = dataUrl;
 
-            if (!input.files || !input.files[0]) return;
-
-            // Show instant local preview
-            const reader = new FileReader();
-            reader.onload = (e) => { avatar.src = e.target.result; };
-            reader.readAsDataURL(input.files[0]);
-
-            // Submit
-            document.getElementById('photo-upload-form').submit();
-        }
+                // 3. Close modal and submit
+                if (typeof closeCropModal === 'function') {
+                    closeCropModal();
+                }
+                form.submit();
+            }
+        };
     </script>
 @endsection

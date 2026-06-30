@@ -33,9 +33,9 @@ class AuthenticatedSessionController extends Controller
         }
 
         if (Auth::user()->role === 'recruiter') {
+
             return redirect()->route('recruiter.dashboard');
         }
-
         return redirect()->route('seeker.dashboard');
     }
 

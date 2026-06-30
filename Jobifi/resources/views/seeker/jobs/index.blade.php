@@ -132,10 +132,15 @@
                             Sort by:
                         </span>
 
-                        <select class="border-none bg-transparent font-semibold focus:outline-none">
-                            <option>Newest</option>
-                            <option>Oldest</option>
-                        </select>
+                        <form method="GET" action="{{ route('seeker.jobs.index') }}">
+                            <select name="sort" onchange="this.form.submit()"
+                                class="border-none bg-transparent font-semibold focus:outline-none">
+
+                                <option value="latest" {{ request('sort') == 'latest' ? 'selected' : '' }}>Latest</option>
+                                <option value="oldest" {{ request('sort') == 'oldest' ? 'selected' : '' }}>Oldest</option>
+                            </select>
+                        </form>
+
 
                     </div>
 
@@ -159,7 +164,7 @@
 
                                 <div>
 
-                                    <a href="{{ route('seeker.jobs.show', $job) }}"
+                                    <a href="{{ route('seeker.jobs.show', encryptId($job->id)) }}"
                                         class="text-2xl font-bold text-slate-900 hover:text-black">
 
                                         {{ $job->title }}
@@ -205,17 +210,38 @@
                             </div>
 
                             <div class="text-right flex flex-col justify-between">
+                                <form action="{{ route('seeker.jobs.save', $job) }}" method="POST">
+                                    @csrf
 
-                                <button class="text-gray-400 hover:text-black transition">
+                                    @php
+                                        $isSaved = in_array($job->id, $savedJobIds ?? []);
+                                    @endphp
 
-                                    <ion-icon name="bookmark-outline" class="text-2xl">
-                                    </ion-icon>
+                                    <button type="submit" class="px-3 py-2 rounded-md  hover:bg-gray-50 transition">
 
-                                </button>
+                                        <div class="flex items-center gap-2">
+
+                                            @php
+                                                $isSaved = in_array($job->id, $savedJobIds);
+                                            @endphp
+
+                                            <ion-icon name="{{ $isSaved ? 'bookmark' : 'bookmark-outline' }}">
+                                            </ion-icon>
+
+                                            {{ $isSaved ? 'Saved' : 'Save' }}
+
+                                        </div>
+
+                                    </button>
+                                </form>
 
                                 @if ($job->salary_range)
-                                    <div class="text-2md font-bold text-slate-900">
-                                        {{ $job->salary_range }}
+                                    <div class="mt-3 flex items-center gap-2 text-green-600 font-medium">
+
+                                        <ion-icon name="cash-outline"></ion-icon>
+
+                                        <span>{{ $job->salary_range }}</span>
+
                                     </div>
                                 @endif
 

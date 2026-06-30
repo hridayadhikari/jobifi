@@ -12,13 +12,29 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        $companyId = Auth::user()->company->id;
+
 
         /*
         |--------------------------------------------------------------------------
         | Statistics
         |--------------------------------------------------------------------------
         */
+
+    $company = Auth::user()->company;
+
+    if (!$company) {
+        return view('recruiter.dashboard', [
+            'activeJobs' => 0,
+            'totalApplicants' => 0,
+            'shortlisted' => 0,
+            'interviews' => 0,
+            'recentApplications' => collect(),
+            'upcomingInterviews' => collect(),
+            'company' => null,
+        ]);
+    }
+
+    $companyId = $company->id;
 
         $activeJobs = Job::where('company_id', $companyId)
             ->where('is_active', true)

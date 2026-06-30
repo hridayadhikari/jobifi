@@ -92,7 +92,7 @@ class ApplicationController extends Controller
             'user_id'      => Auth::id(),
             'resume_path'  => $resumePath,
             'cover_letter' => $request->cover_letter,
-            'status'       => 'PENDING',
+            'status'       => 'pending',
         ]);
 
         return redirect()

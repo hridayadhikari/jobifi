@@ -26,6 +26,27 @@
                 </a>
             </div>
 
+            {{-- Missing Company Profile Alert --}}
+            @if(!auth()->user()->company)
+                <div class="mb-8 p-6 border-2 border-black bg-yellow-50/50 flex flex-col md:flex-row justify-between items-start md:items-center gap-5 shadow-sm">
+                    <div class="flex items-start gap-4">
+                        <ion-icon name="warning" class="text-3xl text-yellow-500 shrink-0 mt-1"></ion-icon>
+                        <div>
+                            <h3 class="text-[13px] font-bold text-slate-900 uppercase tracking-[0.1em] mb-1">
+                                Company Profile Missing
+                            </h3>
+                            <p class="text-[13px] text-slate-600">
+                                You need to set up your company profile to build trust with applicants and showcase your brand.
+                            </p>
+                        </div>
+                    </div>
+                    <a href="{{ route('recruiter.profile.company.create') }}"
+                        class="px-6 py-3 bg-black text-white text-[12px] font-bold uppercase tracking-widest hover:bg-gray-800 transition shadow-sm whitespace-nowrap">
+                        Create Profile
+                    </a>
+                </div>
+            @endif
+
             {{-- Top Stats Grid --}}
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
 
@@ -108,13 +129,10 @@
                                 </tr>
                             </thead>
 
-                            @forelse($recentApplications as $app)
-                                <tbody class="divide-y divide-gray-50">
-                               
+                            <tbody class="divide-y divide-gray-50">
+                                @forelse($recentApplications as $app)
                                     @php
-
                                         $status = $app->status ?? 'pending';
-
                                     @endphp
                                     <tr class="hover:bg-gray-50/50 transition duration-200 group">
                                         <td class="px-8 py-5">
@@ -193,110 +211,118 @@
                                         </td>
 
                                     </tr>
-                                    @empty
-                                        <tr>
-                                            <td colspan="5" class="px-8 py-16 text-center">
-                                                <ion-icon name="document-text-outline"
-                                                    class="text-4xl text-gray-300 mb-3"></ion-icon>
-                                                <p class="text-[12px] font-bold text-gray-400 uppercase tracking-widest">
-                                                    No recent applications
-                                                </p>
-                                            </td>
-                                        </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="5" class="px-8 py-16 text-center">
+                                            <ion-icon name="document-text-outline"
+                                                class="text-4xl text-gray-300 mb-3"></ion-icon>
+                                            <p class="text-[12px] font-bold text-gray-400 uppercase tracking-widest">
+                                                No recent applications
+                                            </p>
+                                        </td>
+                                    </tr>
                                 @endforelse
 
-                                </tbody>
-                            </table>
-                        </div>
-
+                            </tbody>
+                        </table>
                     </div>
 
-                    {{-- Right Column Container --}}
-                    <div class="space-y-8">
+                </div>
 
-                        {{-- Quick Actions --}}
-                        <div class="bg-white border border-gray-200 shadow-sm">
-                            <div class="px-8 py-6 border-b border-gray-100">
-                                <h2 class="text-[13px] font-bold text-[#0a192f] uppercase tracking-[0.1em]">
-                                    Quick Actions
-                                </h2>
-                            </div>
+                {{-- Right Column Container --}}
+                <div class="space-y-8">
 
-                            <div class="p-8 space-y-4">
-                                <a href="#"
-                                    class="flex items-center gap-3 px-6 py-3.5 border border-black text-slate-900 hover:bg-gray-50 transition duration-200 group">
-                                    <ion-icon name="mail-outline"
-                                        class="text-xl text-gray-500 group-hover:text-black transition"></ion-icon>
-                                    <span class="text-[13px] font-bold">Message Applicants</span>
-                                </a>
+                    {{-- Quick Actions --}}
+                    <div class="bg-white border border-gray-200 shadow-sm">
+                        <div class="px-8 py-6 border-b border-gray-100">
+                            <h2 class="text-[13px] font-bold text-[#0a192f] uppercase tracking-[0.1em]">
+                                Quick Actions
+                            </h2>
+                        </div>
 
-                                <a href="#"
-                                    class="flex items-center gap-3 px-6 py-3.5 border border-black text-slate-900 hover:bg-gray-50 transition duration-200 group">
-                                    <ion-icon name="download-outline"
-                                        class="text-xl text-gray-500 group-hover:text-black transition"></ion-icon>
-                                    <span class="text-[13px] font-bold">Export Report</span>
-                                </a>
+                        <div class="p-8 space-y-4">
+                            <a href="#"
+                                class="flex items-center gap-3 px-6 py-3.5 border border-black text-slate-900 hover:bg-gray-50 transition duration-200 group">
+                                <ion-icon name="mail-outline"
+                                    class="text-xl text-gray-500 group-hover:text-black transition"></ion-icon>
+                                <span class="text-[13px] font-bold">Message Applicants</span>
+                            </a>
 
+                            <a href="#"
+                                class="flex items-center gap-3 px-6 py-3.5 border border-black text-slate-900 hover:bg-gray-50 transition duration-200 group">
+                                <ion-icon name="download-outline"
+                                    class="text-xl text-gray-500 group-hover:text-black transition"></ion-icon>
+                                <span class="text-[13px] font-bold">Export Report</span>
+                            </a>
+                            
+                            {{-- Conditional Company Profile Link --}}
+                            @if(auth()->user()->company)
                                 <a href="{{ route('recruiter.profile.show') }}"
                                     class="flex items-center gap-3 px-6 py-3.5 border border-black text-slate-900 hover:bg-gray-50 transition duration-200 group">
                                     <ion-icon name="business-outline"
                                         class="text-xl text-gray-500 group-hover:text-black transition"></ion-icon>
                                     <span class="text-[13px] font-bold">Company Profile</span>
                                 </a>
-                            </div>
+                            @else
+                                <a href="{{ route('recruiter.profile.company.create') }}"
+                                    class="flex items-center gap-3 px-6 py-3.5 border-2 border-dashed border-gray-300 text-slate-900 hover:border-black transition duration-200 group">
+                                    <ion-icon name="add-circle-outline"
+                                        class="text-xl text-gray-400 group-hover:text-black transition"></ion-icon>
+                                    <span class="text-[13px] font-bold text-gray-500 group-hover:text-black transition">Create Company Profile</span>
+                                </a>
+                            @endif
+                        </div>
+                    </div>
+
+                    {{-- Upcoming Interviews --}}
+                    <div class="bg-white border border-gray-200 shadow-sm">
+                        <div class="px-8 py-6 border-b border-gray-100 flex justify-between items-center">
+                            <h2 class="text-[13px] font-bold text-[#0a192f] uppercase tracking-[0.1em]">
+                                Upcoming Interviews
+                            </h2>
                         </div>
 
-                        {{-- Upcoming Interviews --}}
-                        <div class="bg-white border border-gray-200 shadow-sm">
-                            <div class="px-8 py-6 border-b border-gray-100 flex justify-between items-center">
-                                <h2 class="text-[13px] font-bold text-[#0a192f] uppercase tracking-[0.1em]">
-                                    Upcoming Interviews
-                                </h2>
-                            </div>
-
-                            <div class="divide-y divide-gray-100">
-                                @forelse($upcomingInterviews as $interview)
-                                    <div class="p-6 hover:bg-gray-50/50 transition duration-200 group">
-                                        <div class="flex justify-between items-start mb-3">
-                                            <div>
-                                                <h3
-                                                    class="text-[14px] font-bold text-slate-900 group-hover:text-black transition">
-                                                    {{ $interview->application->user->name ?? 'Candidate' }}
-                                                </h3>
-                                                <p class="text-[12px] font-semibold text-gray-500 mt-0.5">
-                                                    {{ $interview->application->job->title ?? 'Position' }}
-                                                </p>
-                                            </div>
-                                            <div class="text-right">
-                                                <p class="text-[11px] font-bold text-black uppercase tracking-widest">
-                                                    {{ $interview->interview_at->format('M d') }}
-                                                </p>
-                                                <p class="text-[12px] font-semibold text-gray-500 mt-0.5">
-                                                    {{ $interview->interview_at->format('h:i A') }}
-                                                </p>
-                                            </div>
+                        <div class="divide-y divide-gray-100">
+                            @forelse($upcomingInterviews as $interview)
+                                <div class="p-6 hover:bg-gray-50/50 transition duration-200 group">
+                                    <div class="flex justify-between items-start mb-3">
+                                        <div>
+                                            <h3
+                                                class="text-[14px] font-bold text-slate-900 group-hover:text-black transition">
+                                                {{ $interview->application->user->name ?? 'Candidate' }}
+                                            </h3>
+                                            <p class="text-[12px] font-semibold text-gray-500 mt-0.5">
+                                                {{ $interview->application->job->title ?? 'Position' }}
+                                            </p>
                                         </div>
+                                        <div class="text-right">
+                                            <p class="text-[11px] font-bold text-black uppercase tracking-widest">
+                                                {{ $interview->interview_at->format('M d') }}
+                                            </p>
+                                            <p class="text-[12px] font-semibold text-gray-500 mt-0.5">
+                                                {{ $interview->interview_at->format('h:i A') }}
+                                            </p>
+                                        </div>
+                                    </div>
 
-                                        @if ($interview->meeting_link)
-                                            <a href="{{ $interview->meeting_link }}" target="_blank"
-                                                class="inline-flex items-center gap-1.5 text-[11px] font-bold text-slate-500 border-b border-slate-300 pb-0.5 hover:text-black hover:border-black transition duration-200">
-                                                <ion-icon name="videocam-outline" class="text-sm"></ion-icon>
-                                                Join Meeting
-                                            </a>
-                                        @endif
-                                    </div>
-                                @empty
-                                    <div class="p-8 text-center">
-                                        <ion-icon name="calendar-clear-outline"
-                                            class="text-3xl text-gray-300 mb-2"></ion-icon>
-                                        <p class="text-[11px] font-bold text-gray-400 uppercase tracking-widest">
-                                            No scheduled interviews
-                                        </p>
-                                    </div>
-                                @endforelse
-                            </div>
+                                    @if ($interview->meeting_link)
+                                        <a href="{{ $interview->meeting_link }}" target="_blank"
+                                            class="inline-flex items-center gap-1.5 text-[11px] font-bold text-slate-500 border-b border-slate-300 pb-0.5 hover:text-black hover:border-black transition duration-200">
+                                            <ion-icon name="videocam-outline" class="text-sm"></ion-icon>
+                                            Join Meeting
+                                        </a>
+                                    @endif
+                                </div>
+                            @empty
+                                <div class="p-8 text-center">
+                                    <ion-icon name="calendar-clear-outline"
+                                        class="text-3xl text-gray-300 mb-2"></ion-icon>
+                                    <p class="text-[11px] font-bold text-gray-400 uppercase tracking-widest">
+                                        No scheduled interviews
+                                    </p>
+                                </div>
+                            @endforelse
                         </div>
-
                     </div>
 
                 </div>
@@ -305,4 +331,6 @@
 
         </div>
 
-    @endsection
+    </div>
+
+@endsection

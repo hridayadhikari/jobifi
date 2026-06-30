@@ -21,7 +21,7 @@
                 <div class="flex items-center gap-5">
 
                     <div class="w-16 h-16 rounded-full overflow-hidden bg-gray-100 border border-gray-200">
-                        <a href="{{ route('recruiter.seeker.show', $application->user) }}">
+                        <a href="{{ route('recruiter.seeker.show', encryptId($application->user->id)) }}">
                             @if ($application->user->profile_photo)
                                 <img src="{{ asset('storage/' . $application->user->profile_photo) }}"
                                     alt="{{ $application->user->name }}" class="w-full h-full object-cover">

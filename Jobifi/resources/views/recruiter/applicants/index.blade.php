@@ -81,7 +81,7 @@
                                         {{ ucfirst($application->status) }}
                                     </span>
 
-                                    <a href="{{ route('recruiter.applicants.show', $application->id) }}"
+                                    <a href="{{ route('recruiter.applicants.show', encryptId($application->id)) }}"
                                         class="inline-block px-6 py-2.5 bg-white border-2 border-black text-black text-[13px] font-bold hover:bg-gray-50 transition duration-200">
                                         Review
                                     </a>

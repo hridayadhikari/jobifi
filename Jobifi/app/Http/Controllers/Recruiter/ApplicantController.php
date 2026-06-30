@@ -54,10 +54,12 @@ class ApplicantController extends Controller
         );
     }
 
-    public function show(Application $application)
+    public function show($id)
     {
 
+$id =   $id = decryptId($id);
 
+    $application = Application::findOrFail($id);
 
         $application->load([
             'user',
@@ -133,30 +135,33 @@ class ApplicantController extends Controller
     }
 
 
-    public function applicantsByJob(Request $request, Job $job)
-    {
-        abort_if(
-            $job->company_id !== Auth::user()->company->id,
-            403
-        );
+public function applicantsByJob(Request $request, $id)
+{
+    $id = decryptId($id);
 
-        $query = Application::with([
-            'user',
-            'job'
-        ])->where('job_id', $job->id);
+    $job = Job::findOrFail($id);
 
-        // Filter by status
-        if ($request->filled('status')) {
-            $query->where('status', $request->status);
-        }
+    abort_if(
+        $job->company_id !== Auth::user()->company->id,
+        403
+    );
 
-        $applications = $query
-            ->latest()
-            ->paginate(10);
+    $query = Application::with([
+        'user',
+        'job'
+    ])->where('job_id', $job->id);
 
-        return view(
-            'recruiter.jobs.applicants',
-            compact('job', 'applications')
-        );
+    if ($request->filled('status')) {
+        $query->where('status', $request->status);
     }
+
+    $applications = $query
+        ->latest()
+        ->paginate(10);
+
+    return view(
+        'recruiter.jobs.applicants',
+        compact('job', 'applications')
+    );
+}
 }

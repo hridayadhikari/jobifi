@@ -132,10 +132,15 @@
                             Sort by:
                         </span>
 
-                        <select class="border-none bg-transparent font-semibold focus:outline-none">
-                            <option>Newest</option>
-                            <option>Oldest</option>
-                        </select>
+                        <form method="GET" action="{{ route('seeker.jobs.index') }}">
+                            <select name="sort" onchange="this.form.submit()"
+                                class="border-none bg-transparent font-semibold focus:outline-none">
+
+                                <option value="latest" {{ request('sort') == 'latest' ? 'selected' : '' }}>Latest</option>
+                                <option value="oldest" {{ request('sort') == 'oldest' ? 'selected' : '' }}>Oldest</option>
+                            </select>
+                        </form>
+
 
                     </div>
 
@@ -159,7 +164,7 @@
 
                                 <div>
 
-                                    <a href="{{ route('seeker.jobs.show', $job) }}"
+                                    <a href="{{ route('seeker.jobs.show', encryptId($job->id)) }}"
                                         class="text-2xl font-bold text-slate-900 hover:text-black">
 
                                         {{ $job->title }}
@@ -212,8 +217,7 @@
                                         $isSaved = in_array($job->id, $savedJobIds ?? []);
                                     @endphp
 
-                                    <button type="submit"
-                                        class="px-3 py-2 rounded-md  hover:bg-gray-50 transition">
+                                    <button type="submit" class="px-3 py-2 rounded-md  hover:bg-gray-50 transition">
 
                                         <div class="flex items-center gap-2">
 

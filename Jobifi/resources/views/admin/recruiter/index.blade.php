@@ -129,7 +129,7 @@
                                     <div class="flex justify-end items-center gap-6">
 
                                         {{-- View Company --}}
-                                        <a href="{{ route('admin.recruiters.company', $recruiter) }}"
+                                        <a href="{{ route('admin.recruiters.company', encryptId($recruiter->id)) }}"
                                             class="text-[11px] font-bold text-slate-700 uppercase tracking-wider hover:text-black transition">
                                             View Company
                                         </a>

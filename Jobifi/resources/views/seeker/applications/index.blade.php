@@ -60,7 +60,7 @@
                                 </td>
                                 <td class="px-8 py-6 text-right">
                                     <a href="#" class="text-[14px] font-bold text-slate-800 hover:text-black transition">
-                                    <a href="{{ route('seeker.applications.show', $application->id) }}" class="text-[14px] font-bold text-slate-800 hover:text-black transition">
+                                    <a href="{{ route('seeker.applications.show', encryptId($application->id)) }}" class="text-[14px] font-bold text-slate-800 hover:text-black transition">
                                         View Details
                                     </a>
                                 </td>

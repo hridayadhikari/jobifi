@@ -62,18 +62,22 @@ class SeekerJobController extends Controller
             compact('jobs', 'categories', 'savedJobIds')
         );
     }
-    public function show(Job $job)
-    {
-        $job->load([
-            'company',
-            'category',
-            'skills'
-        ]);
-        $isSaved = auth()->user()
-            ->savedJobs()
-            ->where('job_id', $job->id)
-            ->exists();
+public function show($id)
+{
+    $id = decryptId($id);
 
-        return view('seeker.jobs.show', compact('job', 'isSaved'));
-    }
+    $job = Job::with([
+        'company',
+        'category',
+        'skills'
+    ])->findOrFail($id);
+
+    $isSaved = auth()->user()
+        ->savedJobs()
+        ->where('job_id', $job->id)
+        ->exists();
+
+    return view('seeker.jobs.show', compact('job', 'isSaved'));
+}
+    
 }

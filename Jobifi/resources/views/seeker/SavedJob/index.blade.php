@@ -94,7 +94,7 @@
                                 <td class="px-6 py-4 text-right">
                                     <div class="flex justify-end items-center gap-4">
                                         
-                                        <a href="{{ route('seeker.jobs.show', $job) }}"
+                                        <a href="{{ route('seeker.jobs.show', encryptId($job->id)) }}"
                                             class="text-xs font-bold text-slate-800 hover:text-black hover:underline uppercase tracking-wider transition">
                                             View Job
                                         </a>

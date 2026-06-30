@@ -190,7 +190,7 @@
 
             border-radius: 999px;
 
-            animation: loading 2s ease forwards;
+            animation: loading 3s ease forwards;
         }
 
         @keyframes loading {

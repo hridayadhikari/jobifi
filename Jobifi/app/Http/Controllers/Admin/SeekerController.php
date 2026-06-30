@@ -11,8 +11,11 @@ use App\Models\User;
 
 class SeekerController extends Controller
 {
-    public function show(User $user)
+    public function show($id)
     {
+          $id = decryptId($id);
+
+    $user = User::findOrFail($id);
         $user  = $user;
         $profile = $user->seekerProfile()->firstOrCreate(['user_id' => $user->id]);
 

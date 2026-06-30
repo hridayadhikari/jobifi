@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\AdminJobController;
 use App\Http\Controllers\Admin\RecruiterController;
 use App\Http\Controllers\Admin\SeekerController;
 use App\Http\Controllers\Admin\UserTableController;
+use App\Http\Controllers\Admin\DashboardController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -15,9 +16,7 @@ use Illuminate\Support\Facades\Route;
 
 //  Admin
 Route::middleware(['auth', 'admin'])->group(function () {
-    Route::get('/admin/dashboard', function () {
-        return view('admin.dashboard');
-    })->name('admin.dashboard');
+    Route::get('/admin/dashboard', [DashboardController::class,'dashboard'])->name('admin.dashboard');
     Route::resource('skills', SkillController::class)->names([
         'index' => 'skills.index',
         'store' => 'skills.store',

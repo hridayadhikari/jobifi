@@ -122,12 +122,12 @@
                                 <td class="px-6 py-4 text-right">
                                     <div class="flex justify-end items-center gap-4">
                                         
-                                        <a href="{{ route('recruiter.jobs.edit', $job->id) }}"
+                                        <a href="{{ route('recruiter.jobs.edit', encryptId($job->id)) }}"
                                             class="text-xs font-bold text-slate-800 hover:text-black hover:underline uppercase tracking-wider transition">
                                             Edit
                                         </a>
                                         
-                                        <a href="{{ route('recruiter.jobs.applicants', $job->id) }}"
+                                        <a href="{{ route('recruiter.jobs.applicants', encryptId($job->id)) }}"
                                             class="text-xs font-bold text-slate-800 hover:text-black hover:underline uppercase tracking-wider transition">
                                             Applicants
                                         </a>

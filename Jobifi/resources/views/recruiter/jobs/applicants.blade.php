@@ -196,13 +196,13 @@
                                     <div class="flex justify-end items-center gap-6">
 
                                         {{-- Secondary Action (Clean text link to reduce visual clutter) --}}
-                                        <a href="{{ route('recruiter.seeker.show', $application->user) }}"
+                                       <a href="{{ route('recruiter.seeker.show', encryptId($application->user->id)) }}"
                                             class="text-[11px] font-bold text-slate-500 hover:text-black uppercase tracking-widest transition duration-200">
                                             Profile
                                         </a>
 
                                         {{-- Primary Action (Heavy bordered button) --}}
-                                        <a href="{{ route('recruiter.applicants.show', $application->id) }}"
+                                        <a href="{{ route('recruiter.applicants.show', encryptId($application->id)) }}"
                                             class="inline-block px-5 py-2 bg-white border-2 border-black text-black text-[12px] font-bold hover:bg-gray-50 transition duration-200">
                                             Review
                                         </a>

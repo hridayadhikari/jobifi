@@ -104,21 +104,23 @@ class JobController extends Controller
     }
 
 
-    public function edit(Job $job)
-    {
-        // Authorize that the job belongs to the recruiter's company
-        $this->authorizeJob($job);
+   public function edit($id)
+{
+    $id = decryptId($id);
 
-        // Load categories and skills for the edit form dropdown/selection
-        $categories = Category::where('is_active', true)->get();
-        $skills = Skill::orderBy('name')->get();
+    $job = Job::findOrFail($id);
 
-        return view('recruiter.jobs.edit', compact(
-            'job',
-            'categories',
-            'skills'
-        ));
-    }
+    $this->authorizeJob($job);
+
+    $categories = Category::where('is_active', true)->get();
+    $skills = Skill::orderBy('name')->get();
+
+    return view('recruiter.jobs.edit', compact(
+        'job',
+        'categories',
+        'skills'
+    ));
+}
 
 
     public function update(Request $request, Job $job)

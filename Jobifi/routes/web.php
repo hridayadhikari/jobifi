@@ -3,6 +3,9 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
+Route::get('/helper-test', function () {
+    return encryptId(123);
+});
 
 
 Route::get('/', function () {

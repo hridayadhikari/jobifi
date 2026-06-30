@@ -22,8 +22,11 @@ class ApplicationController extends Controller
             compact('applications')
         );
     }
-    public function show(Application $application)
+    public function show($id)
     {
+        $id =   $id = decryptId($id);
+
+    $application = Application::findOrFail($id);
         abort_if(
             $application->user_id !== Auth::id(),
             403

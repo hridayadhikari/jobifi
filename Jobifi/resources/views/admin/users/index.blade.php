@@ -138,12 +138,12 @@
                                     <div class="flex justify-end items-center gap-4">
 
                                         @if (strtoupper($user->role) === 'RECRUITER')
-                                            <a href="{{ route('recruiters.show', $user) }}"
+                                            <a href="{{ route('recruiters.show', encryptId($user->id)) }}"
                                                 class="text-xs font-bold text-slate-800 hover:text-black hover:underline uppercase tracking-wider transition">
                                                 View Profile
                                             </a>
                                         @elseif(strtoupper($user->role) === 'SEEKER')
-                                            <a href="{{ route('seeker.show', $user) }}"
+                                            <a href="{{ route('seeker.show', encryptId($user->id)) }}"
                                                 class="text-xs font-bold text-slate-800 hover:text-black hover:underline uppercase tracking-wider transition">
                                                 View Profile
                                             </a>

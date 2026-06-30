@@ -85,8 +85,11 @@ class RecruiterController extends Controller
     /**
      * View recruiter company.
      */
-    public function company(User $user)
+    public function company($id)
     {
+       $id =   $id = decryptId($id);
+
+    $user = User::findOrFail($id);
         if ($user->role !== 'recruiter') {
             abort(404);
         }
@@ -101,8 +104,11 @@ class RecruiterController extends Controller
             compact('user', 'jobs', 'totalJobs')
         );
     }
-   public function profile(User $user)
+   public function profile($id)
 {
+     $id = decryptId($id);
+
+    $user = User::findOrFail($id);
     // Ensure the user is a recruiter
     if ($user->role !== 'recruiter') {
         abort(404);

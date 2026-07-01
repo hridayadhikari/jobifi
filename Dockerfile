@@ -5,8 +5,8 @@ FROM node:20-alpine AS node-builder
 
 WORKDIR /app
 
-COPY package.json package-lock.json* ./
-RUN npm ci --prefer-offline
+COPY package.json ./
+RUN npm install
 
 COPY resources/ resources/
 COPY vite.config.js tailwind.config.js postcss.config.js ./

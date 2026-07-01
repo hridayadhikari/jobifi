@@ -37,6 +37,7 @@ COPY . .
 RUN COMPOSER_MEMORY_LIMIT=-1 composer dump-autoload \
       --optimize \
       --no-dev \
+      --no-scripts \
       --ignore-platform-reqs
 
 # ──────────────────────────────────────────────

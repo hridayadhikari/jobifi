@@ -72,18 +72,23 @@
                         </button>
 
                     </form>
-
-                    @if (auth()->user()->hasCompleteProfile())
-                         <a href="{{ route('seeker.jobs.apply.form', $job) }}"
-                        class="bg-black text-white px-8 py-3  font-medium hover:bg-slate-800 transition">
-                        Apply Now</a>
-
+                    @if ($hasApplied)
+                        <button class="bg-gray-400 text-white px-8 py-3 font-medium cursor-not-allowed" disabled>
+                            Already Applied
+                        </button>
+                    
+                    @elseif (auth()->user()->hasCompleteProfile())
+                        <a href="{{ route('seeker.jobs.apply.form', encryptId($job->id)) }}"
+                            class="bg-black text-white px-8 py-3 font-medium hover:bg-slate-800 transition">
+                            Apply Now
+                        </a>
                     @else
-                        <a href="{{ route('profile.edit') }}" class="bg-black text-white px-3 py-3  font-medium hover:bg-slate-800 transition cursor-not-allowed">
+                        <a href="{{ route('profile.edit') }}"
+                            class="bg-black text-white px-8 py-3 font-medium hover:bg-slate-800 transition">
                             Complete Profile
                         </a>
                     @endif
-                   
+
                 </div>
 
             </div>

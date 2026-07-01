@@ -2,6 +2,7 @@
 <html>
 
 <head>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="icon" href="{{ asset('images/loolgo.png') }}">
     <title>@yield('title', 'Jobifi')</title>
     <style>
@@ -376,6 +377,304 @@
                     }
                 });
             });
+        });
+
+        $(document).on('click', '.no-company', function (e) {
+    e.preventDefault();
+
+    Swal.fire({
+        icon: 'info',
+        title: 'Company Not Found',
+        text: "This recruiter hasn't created a company profile yet.",
+        confirmButtonColor: '#111827'
+    });
+});
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const notifButton = document.getElementById('notificationButton');
+            const notifDropdown = document.getElementById('notificationDropdown');
+            const closeDropdownBtn = document.getElementById('closeNotificationDropdown');
+
+            if (notifButton && notifDropdown) {
+                // Toggle dropdown on bell icon click
+                notifButton.addEventListener('click', function(e) {
+                    e.stopPropagation(); // Prevents the click from bubbling up to the document
+                    notifDropdown.classList.toggle('hidden');
+                });
+
+                // Optional: Close dropdown when the "X" button is clicked
+                if (closeDropdownBtn) {
+                    closeDropdownBtn.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        notifDropdown.classList.add('hidden');
+                    });
+                }
+
+                // Close dropdown when clicking outside of it
+                document.addEventListener('click', function(e) {
+                    if (!notifDropdown.contains(e.target) && !notifButton.contains(e.target)) {
+                        notifDropdown.classList.add('hidden');
+                    }
+                });
+            }
+        });
+    </script>
+    <script>
+        function loadNotifications() {
+
+            $.ajax({
+
+                url: "{{ route('notifications.fetch') }}",
+                type: "GET",
+
+                success: function(response) {
+
+                    let html = "";
+
+                    if (response.notifications.length === 0) {
+                        let icon = "notifications-outline";
+
+                        switch (notification.type) {
+
+                            case "application":
+                                icon = "briefcase-outline";
+                                break;
+
+                            case "interview":
+                                icon = "chatbubble-outline";
+                                break;
+
+                            case "job":
+                                icon = "sparkles-outline";
+                                break;
+
+                            case "alert":
+                                icon = "alert-circle-outline";
+                                break;
+
+                            case "reminder":
+                                icon = "time-outline";
+                                break;
+
+                        }
+
+                        html = `
+                    <div class="flex flex-col items-center justify-center py-10 px-6 text-center">
+                        <ion-icon
+                            name="notifications-off-outline"
+                            class="text-4xl text-gray-300 mb-3">
+                        </ion-icon>
+
+                        <h4 class="text-[13px] font-bold text-gray-600">
+                            No notifications yet
+                        </h4>
+
+                        <p class="mt-1 text-[11px] text-gray-400">
+                            We'll notify you when something important happens.
+                        </p>
+                    </div>
+                `;
+
+                    } else {
+
+                        response.notifications.forEach(function(notification) {
+
+                            html += `
+<a href="${notification.url ?? '#'}"
+   data-id="${notification.id}"
+   data-read="${notification.is_read}"
+   class="notification-item flex items-start gap-4 p-5 hover:bg-gray-50 transition relative bg-white">
+
+    ${
+        !notification.is_read
+        ? `<div class="absolute left-2 top-1/2 -translate-y-1/2 w-1.5 h-1.5 bg-black rounded-full"></div>`
+        : ''
+    }
+
+    <div class="w-8 h-8 rounded border border-gray-200 bg-gray-50 flex items-center justify-center shrink-0">
+        <ion-icon name="${icon}" class="text-gray-500"></ion-icon>
+    </div>
+
+    <div>
+        <h4 class="text-[13px] font-bold text-slate-900 mb-0.5">
+            ${notification.title}
+        </h4>
+
+        <p class="text-[12px] text-gray-500 leading-snug">
+            ${notification.message}
+        </p>
+
+        <span class="block mt-2 text-[9px] font-bold text-gray-400 uppercase tracking-widest">
+            ${notification.time}
+        </span>
+    </div>
+
+</a>
+                    `;
+                        });
+
+                    }
+
+                    $("#notificationList").html(html);
+
+                    if (response.unreadCount > 0) {
+                        $(".notification-count")
+                            .text(response.unreadCount)
+                            .removeClass("hidden");
+                    } else {
+                        $(".notification-count")
+                            .text(0)
+                            .addClass("hidden");
+                    }
+
+                },
+
+                error: function(error) {
+                    console.error(error);
+                }
+
+            });
+
+        }
+        loadNotifications();
+
+        setInterval(function() {
+
+            loadNotifications();
+
+        }, 1000);
+
+        $("#notificationButton").on("click", function() {
+
+            loadNotifications();
+
+        });
+
+        $(document).on("click", ".notification-item", function(e) {
+            e.preventDefault();
+
+
+            let id = $(this).data("id");
+
+            $.ajax({
+                url: "/notifications/" + id + "/read",
+                type: "POST",
+                data: {
+                    _token: $('meta[name="csrf-token"]').attr("content")
+                },
+                success: function() {
+
+                    let badges = $(".notification-count");
+                    let count = parseInt(badges.first().text()) || 0;
+
+                    let newCount = Math.max(count - 1, 0);
+
+                    if (newCount > 0) {
+                        badges.text(newCount).removeClass("hidden");
+                    } else {
+                        badges.addClass("hidden");
+                    }
+
+                    // Optional: visually mark this notification as read
+                    // $(this).attr("data-read", "true");
+
+                    // Sync with server in background
+                    loadNotifications();
+                    window.location.href = url;
+                }
+            });
+
+        });
+
+        $("#markAllRead").click(function() {
+
+            $.ajax({
+
+                url: "{{ route('notifications.readAll') }}",
+                type: "POST",
+                data: {
+                    _token: $('meta[name="csrf-token"]').attr("content")
+                },
+                success: function(response) {
+
+                    // Instantly update all unread count badges
+                    $(".notification-count").text(0);
+
+                    // Refresh notifications from server
+                    loadNotifications();
+
+                },
+
+                error: function(xhr) {
+
+                    console.error(xhr);
+
+                }
+
+            });
+
+        });
+
+        $("#clearAll").click(function() {
+
+            Swal.fire({
+                title: "Clear all notifications?",
+                text: "This action cannot be undone.",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#111827",
+                cancelButtonColor: "#d1d5db",
+                confirmButtonText: "Yes, clear all",
+                cancelButtonText: "Cancel",
+                reverseButtons: true
+            }).then((result) => {
+
+                if (result.isConfirmed) {
+
+                    $.ajax({
+
+                        url: "/notifications",
+                        type: "DELETE",
+
+                        data: {
+                            _token: $('meta[name="csrf-token"]').attr("content")
+                        },
+
+                        success: function() {
+
+                            $(".notification-count").text(0);
+
+                            loadNotifications();
+
+                            Swal.fire({
+                                icon: "success",
+                                title: "Notifications Cleared",
+                                text: "All notifications have been removed.",
+                                timer: 1800,
+                                showConfirmButton: false
+                            });
+
+                        },
+
+                        error: function(xhr) {
+
+                            console.error(xhr);
+
+                            Swal.fire({
+                                icon: "error",
+                                title: "Oops!",
+                                text: "Unable to clear notifications."
+                            });
+
+                        }
+
+                    });
+
+                }
+
+            });
+
         });
     </script>
 

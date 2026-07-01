@@ -39,8 +39,14 @@ class ApplicationController extends Controller
         $profile = Auth::user()->seekerProfile;
         return view('seeker.applications.show', compact('application', 'profile'));
     }
-    public function create(Job $job)
-    {
+    public function create($id)
+    { 
+        $id = decryptId($id);
+ $job = Job::with([
+        'company',
+        'category',
+        'skills'
+    ])->findOrFail($id);
         $user = Auth::user();
         if (!$user->hasCompleteProfile()) {
 
@@ -92,7 +98,7 @@ class ApplicationController extends Controller
             'user_id'      => Auth::id(),
             'resume_path'  => $resumePath,
             'cover_letter' => $request->cover_letter,
-            'status'       => 'PENDING',
+            'status'       => 'pending',
         ]);
 
         return redirect()

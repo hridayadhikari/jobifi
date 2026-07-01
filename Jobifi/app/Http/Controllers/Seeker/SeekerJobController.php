@@ -77,7 +77,13 @@ public function show($id)
         ->where('job_id', $job->id)
         ->exists();
 
-    return view('seeker.jobs.show', compact('job', 'isSaved'));
+        $hasApplied = $job->applications()
+    ->where('user_id', auth()->id())
+    ->exists();
+
+
+
+    return view('seeker.jobs.show', compact('job', 'isSaved','hasApplied'));
 }
     
 }

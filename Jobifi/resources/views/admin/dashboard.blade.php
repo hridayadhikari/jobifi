@@ -1,6 +1,6 @@
 @extends('master_index')
 
-@section('title', 'Admin Overview')
+@section('title', 'Admin Dashboard')
 
 @section('content')
 
@@ -11,7 +11,7 @@
             {{-- Page Header --}}
             <div class="mb-10">
                 <h1 class="text-[28px] font-extrabold text-[#0a192f] uppercase tracking-tight leading-none mb-2">
-                    Admin Overview
+                    Admin Dashboard
                 </h1>
                 <p class="text-[11px] font-bold text-[#8ba3b8] uppercase tracking-[0.15em]">
                     Monitor system performance and user activity.

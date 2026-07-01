@@ -1,38 +1,64 @@
 #!/bin/sh
 set -e
 
-# ── 1. Create .env if not present ──────────────────────────────────────────
+# ── 1. Create .env from .env.example if missing ──────────────────────────
 if [ ! -f /var/www/html/.env ]; then
     cp /var/www/html/.env.example /var/www/html/.env
 fi
 
-# ── 2. Ensure APP_KEY is set ───────────────────────────────────────────────
+# ── 2. Write Render-injected env vars into .env ──────────────────────────
+# Render provides env vars as actual shell variables, not in a .env file.
+# We sync them so Laravel's config:cache picks up the correct values.
+update_env() {
+    local key="$1"
+    local value="$2"
+    if [ -n "$value" ]; then
+        if grep -q "^${key}=" /var/www/html/.env; then
+            sed -i "s|^${key}=.*|${key}=${value}|" /var/www/html/.env
+        else
+            echo "${key}=${value}" >> /var/www/html/.env
+        fi
+    fi
+}
+
+update_env "APP_KEY"          "$APP_KEY"
+update_env "APP_ENV"          "$APP_ENV"
+update_env "APP_URL"          "$APP_URL"
+update_env "APP_DEBUG"        "$APP_DEBUG"
+update_env "DB_CONNECTION"    "$DB_CONNECTION"
+update_env "DB_HOST"          "$DB_HOST"
+update_env "DB_PORT"          "$DB_PORT"
+update_env "DB_DATABASE"      "$DB_DATABASE"
+update_env "DB_USERNAME"      "$DB_USERNAME"
+update_env "DB_PASSWORD"      "$DB_PASSWORD"
+update_env "SESSION_DRIVER"   "$SESSION_DRIVER"
+update_env "QUEUE_CONNECTION" "$QUEUE_CONNECTION"
+update_env "CACHE_STORE"      "$CACHE_STORE"
+update_env "MAIL_MAILER"      "$MAIL_MAILER"
+
+# ── 3. Generate APP_KEY if still blank ────────────────────────────────────
 if grep -q "^APP_KEY=$" /var/www/html/.env; then
     php /var/www/html/artisan key:generate --force
 fi
 
-# ── 3. Wait for PostgreSQL to be ready ────────────────────────────────────
-DB_HOST=$(grep "^DB_HOST=" /var/www/html/.env | cut -d'=' -f2- | tr -d '"'"'" | xargs)
-DB_PORT=$(grep "^DB_PORT=" /var/www/html/.env | cut -d'=' -f2- | tr -d '"'"'" | xargs)
-DB_PORT=${DB_PORT:-5432}
-
-if [ -n "$DB_HOST" ]; then
-    echo "Waiting for PostgreSQL at $DB_HOST:$DB_PORT..."
-    until pg_isready -h "$DB_HOST" -p "$DB_PORT" -q; do
-        sleep 1
+# ── 4. Wait for PostgreSQL (uses shell env var, not .env) ─────────────────
+if [ -n "$DB_HOST" ] && [ "${DB_CONNECTION:-pgsql}" = "pgsql" ]; then
+    echo "Waiting for PostgreSQL at ${DB_HOST}:${DB_PORT:-5432}..."
+    until pg_isready -h "$DB_HOST" -p "${DB_PORT:-5432}" -q; do
+        sleep 2
     done
     echo "PostgreSQL is ready."
 fi
 
-# ── 4. Run migrations ─────────────────────────────────────────────────────
+# ── 5. Run migrations ─────────────────────────────────────────────────────
 php /var/www/html/artisan migrate --force
 
-# ── 5. Cache config, routes & views ──────────────────────────────────────
+# ── 6. Cache config, routes & views ──────────────────────────────────────
 php /var/www/html/artisan config:cache
 php /var/www/html/artisan route:cache
 php /var/www/html/artisan view:cache
 
-# ── 6. Configure PHP-FPM to use unix socket ───────────────────────────────
+# ── 7. Configure PHP-FPM unix socket ─────────────────────────────────────
 cat > /usr/local/etc/php-fpm.d/www.conf <<'EOF'
 [www]
 user = www-data
@@ -48,8 +74,8 @@ pm.min_spare_servers = 1
 pm.max_spare_servers = 5
 EOF
 
-# ── 7. Fix final ownership ────────────────────────────────────────────────
+# ── 8. Fix storage ownership ──────────────────────────────────────────────
 chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
-# ── 8. Start supervisor ───────────────────────────────────────────────────
+# ── 9. Launch supervisor (nginx + php-fpm + queue) ────────────────────────
 exec /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf

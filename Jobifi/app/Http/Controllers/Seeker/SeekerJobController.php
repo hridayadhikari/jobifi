@@ -76,9 +76,9 @@ public function show($id)
         ->savedJobs()
         ->where('job_id', $job->id)
         ->exists();
-
-        $hasApplied = $job->applications()
+$hasApplied = $job->applications()
     ->where('user_id', auth()->id())
+    ->where('status', '!=', 'rejected')
     ->exists();
 
 

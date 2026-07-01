@@ -20,23 +20,27 @@ class NewApplicationNotification extends Notification
     }
 
     public function toDatabase(object $notifiable): array
-    {
-        return [
-            'notification_key' => 'application-' . $this->application->id,
+{
+    return [
+        'notification_key' => 'application-' . $this->application->id,
 
-            'title' => 'New Job Application',
+        'title' => 'New Job Application',
 
-            'message' => $this->application->user->name .
-                ' applied for "' .
-                $this->application->job->title . '".',
+        'message' => $this->application->user->name .
+            ' applied for "' .
+            $this->application->job->title . '".',
 
-            'application_id' => $this->application->id,
+        'type' => 'application',
 
-            'job_id' => $this->application->job_id,
+        'url' => route('recruiter.applications.show', $this->application->id),
 
-            'job_title' => $this->application->job->title,
+        'application_id' => $this->application->id,
 
-            'applicant_name' => $this->application->user->name,
-        ];
-    }
+        'job_id' => $this->application->job_id,
+
+        'job_title' => $this->application->job->title,
+
+        'applicant_name' => $this->application->user->name,
+    ];
+}
 }

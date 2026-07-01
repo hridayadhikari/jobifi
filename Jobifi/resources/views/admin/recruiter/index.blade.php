@@ -75,7 +75,8 @@
                                             class="w-10 h-10 border border-gray-200 rounded flex items-center justify-center bg-gray-50/50">
                                             @if ($recruiter->profile_photo)
                                                 <img src="{{ asset('storage/' . $recruiter->profile_photo) }}"
-                                                    class="w-full h-full object-cover object-top" alt="{{ $recruiter->name }}">
+                                                    class="w-full h-full object-cover object-top"
+                                                    alt="{{ $recruiter->name }}">
                                             @else
                                                 {{-- Placeholder icon avatar --}}
                                                 <div class="w-full h-full flex items-center justify-center bg-indigo-100">
@@ -129,8 +130,8 @@
                                     <div class="flex justify-end items-center gap-6">
 
                                         {{-- View Company --}}
-                                        <a href="{{ route('admin.recruiters.company', encryptId($recruiter->id)) }}"
-                                            class="text-[11px] font-bold text-slate-700 uppercase tracking-wider hover:text-black transition">
+                                        <a href="{{ $recruiter->company ? route('admin.recruiters.company', encryptId($recruiter->id)) : 'javascript:void(0);' }}"
+                                            class="text-[11px] font-bold uppercase tracking-wider transition {{ $recruiter->company ? 'text-slate-700 hover:text-black' : 'text-slate-400 no-company' }}">
                                             View Company
                                         </a>
 

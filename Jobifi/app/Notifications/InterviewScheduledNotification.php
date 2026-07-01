@@ -19,20 +19,28 @@ class InterviewScheduledNotification extends Notification
         return ['database'];
     }
 
-    public function toDatabase(object $notifiable): array
-    {
-        return [
-            'notification_key' => 'interview-' . $this->interview->id,
+   public function toDatabase(object $notifiable): array
+{
+    return [
+        'notification_key' => 'interview-' . $this->interview->id,
 
-            'title' => 'Interview Scheduled',
+        'title' => 'Interview Scheduled',
 
-            'message' => 'Your interview for "' .
-                $this->interview->application->job->title .
-                '" has been scheduled.',
+        'message' => 'Your interview for "' .
+            $this->interview->application->job->title .
+            '" has been scheduled.',
 
-            'interview_id' => $this->interview->id,
+        'type' => 'interview',
 
-            'application_id' => $this->interview->application_id,
-        ];
-    }
+        'url' => route('seeker.interviews.show', $this->interview->id),
+
+        'interview_id' => $this->interview->id,
+
+        'application_id' => $this->interview->application_id,
+
+        'job_id' => $this->interview->application->job->id,
+
+        'job_title' => $this->interview->application->job->title,
+    ];
+}
 }

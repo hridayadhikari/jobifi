@@ -19,20 +19,28 @@ class InterviewReminderNotification extends Notification
         return ['database'];
     }
 
-    public function toDatabase(object $notifiable): array
-    {
-        return [
-            'notification_key' => 'interview-reminder-' . $this->interview->id,
+ public function toDatabase(object $notifiable): array
+{
+    return [
+        'notification_key' => 'interview-reminder-' . $this->interview->id,
 
-            'title' => 'Interview Reminder',
+        'title' => 'Interview Reminder',
 
-            'message' => 'Reminder: Your interview for "' .
-                $this->interview->application->job->title .
-                '" is scheduled within the next 24 hours.',
+        'message' => 'Reminder: Your interview for "' .
+            $this->interview->application->job->title .
+            '" is scheduled within the next 24 hours.',
 
-            'interview_id' => $this->interview->id,
+        'type' => 'interview',
 
-            'application_id' => $this->interview->application_id,
-        ];
-    }
+        'url' => route('seeker.interviews.show', $this->interview->id),
+
+        'interview_id' => $this->interview->id,
+
+        'application_id' => $this->interview->application_id,
+
+        'job_id' => $this->interview->application->job->id,
+
+        'job_title' => $this->interview->application->job->title,
+    ];
+}
 }

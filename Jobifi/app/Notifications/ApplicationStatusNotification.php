@@ -20,30 +20,34 @@ class ApplicationStatusNotification extends Notification
     }
 
     public function toDatabase(object $notifiable): array
-    {
-        return [
-            'notification_key' =>
-                'application-status-' .
-                $this->application->id .
-                '-' .
-                strtolower($this->application->status),
+{
+    return [
+        'notification_key' =>
+            'application-status-' .
+            $this->application->id .
+            '-' .
+            strtolower($this->application->status),
 
-            'title' => 'Application Status Updated',
+        'title' => 'Application Status Updated',
 
-            'message' =>
-                'Your application for "' .
-                $this->application->job->title .
-                '" has been ' .
-                ucfirst(strtolower($this->application->status)) .
-                '.',
+        'message' =>
+            'Your application for "' .
+            $this->application->job->title .
+            '" has been ' .
+            ucfirst(strtolower($this->application->status)) .
+            '.',
 
-            'application_id' => $this->application->id,
+        'type' => 'application',
 
-            'job_id' => $this->application->job_id,
+        'url' => route('seeker.applications.show', $this->application->id),
 
-            'status' => strtolower($this->application->status),
+        'application_id' => $this->application->id,
 
-            'job_title' => $this->application->job->title,
-        ];
-    }
+        'job_id' => $this->application->job_id,
+
+        'status' => strtolower($this->application->status),
+
+        'job_title' => $this->application->job->title,
+    ];
 }
+    }

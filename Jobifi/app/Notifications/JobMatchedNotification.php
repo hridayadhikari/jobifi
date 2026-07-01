@@ -19,22 +19,26 @@ class JobMatchedNotification extends Notification
         return ['database'];
     }
 
-    public function toDatabase(object $notifiable): array
-    {
-        return [
-            'notification_key' => 'job-match-' . $this->job->id . '-user-' . $notifiable->id,
+public function toDatabase(object $notifiable): array
+{
+    return [
+        'notification_key' => 'job-match-' . $this->job->id . '-user-' . $notifiable->id,
 
-            'title' => 'New Job Match',
+        'title' => 'New Job Match',
 
-            'message' => 'A new job "' .
-                $this->job->title .
-                '" matches your skills.',
+        'message' => 'A new job "' .
+            $this->job->title .
+            '" matches your skills.',
 
-            'job_id' => $this->job->id,
+        'type' => 'job',
 
-            'company' => $this->job->company->name,
+        'url' => route('seeker.jobs.show', $this->job->id),
 
-            'job_title' => $this->job->title,
-        ];
-    }
+        'job_id' => $this->job->id,
+
+        'company' => $this->job->company->name,
+
+        'job_title' => $this->job->title,
+    ];
+}
 }

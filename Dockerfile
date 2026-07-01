@@ -22,16 +22,22 @@ FROM composer:2.8 AS composer-builder
 WORKDIR /app
 
 COPY composer.json composer.lock ./
-# Install production deps only (no dev)
+# Step 1: install deps without generating autoloader
+# (app source files are not present yet – avoids "file not found" errors)
 RUN COMPOSER_MEMORY_LIMIT=-1 composer install \
       --no-dev \
       --no-interaction \
       --no-progress \
-      --optimize-autoloader \
+      --no-autoloader \
       --prefer-dist \
       --ignore-platform-reqs
 
+# Step 2: copy full source, then build optimized autoloader
 COPY . .
+RUN COMPOSER_MEMORY_LIMIT=-1 composer dump-autoload \
+      --optimize \
+      --no-dev \
+      --ignore-platform-reqs
 
 # ──────────────────────────────────────────────
 #  Stage 3 – Final runtime image

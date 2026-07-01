@@ -89,6 +89,9 @@ RUN mkdir -p storage/logs \
              storage/framework/sessions \
              storage/framework/views \
              bootstrap/cache \
+             /var/log/supervisor \
+             /var/log/nginx \
+             /var/run \
     && chown -R www-data:www-data /var/www/html \
     && chmod -R 775 storage bootstrap/cache
 

@@ -23,12 +23,13 @@ WORKDIR /app
 
 COPY composer.json composer.lock ./
 # Install production deps only (no dev)
-RUN composer install \
+RUN COMPOSER_MEMORY_LIMIT=-1 composer install \
       --no-dev \
       --no-interaction \
       --no-progress \
       --optimize-autoloader \
-      --prefer-dist
+      --prefer-dist \
+      --ignore-platform-reqs
 
 COPY . .
 

@@ -53,7 +53,10 @@ fi
 # ── 5. Run migrations ─────────────────────────────────────────────────────
 php /var/www/html/artisan migrate --force
 
-# ── 6. Cache config, routes & views ──────────────────────────────────────
+# ── 6. Create storage symlink (public/storage → storage/app/public) ───────
+php /var/www/html/artisan storage:link --force
+
+# ── 7. Cache config, routes & views ──────────────────────────────────────
 php /var/www/html/artisan config:cache
 php /var/www/html/artisan route:cache
 php /var/www/html/artisan view:cache

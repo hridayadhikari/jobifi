@@ -48,7 +48,7 @@ Jobifi is a full-stack Job Portal web application developed using Laravel. It co
 ### Frontend
 - HTML5
 - CSS3
-- Bootstrap 5
+- Tailwind CSS
 - JavaScript
 - AJAX
 - jQuery
@@ -207,8 +207,8 @@ npm run dev
 - ✅ Skill Management
 - ✅ Applications
 - ✅ Saved Jobs
-- 🚧 Notifications
-- 🚧 Email Services
+- ✅ Notifications
+- ✅ Email Services
 
 ---
 
@@ -258,6 +258,5 @@ This project is developed for educational and internship purposes.
 
 - Laravel
 - Laravel Breeze
-- Bootstrap
-- PostgreSQL
+- Tailwind CSS
 - PHP Community
